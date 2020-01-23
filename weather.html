@@ -1,0 +1,51 @@
+
+<html>
+
+    <head>
+   
+        <link rel="stylesheet" href="./style1.css">
+        <!-- <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?v=3&sensor=false&libraries=places&key=AIzaSyAEzo2gX09rlW1t6p_a-XyLFKpfjjnqSoo"></script> -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script  type="text/javascript">  
+
+             function activate_places()
+                 {
+                    var input = document.getElementById("locs")
+                    var auto_comp = new google.maps.places.Autocomplete(input);
+                 }   
+        </script>
+    
+    </head>
+
+    <body >
+        <script src="./weatherts.js"></script>
+        <script src="currentlocation.js"></script>
+        <script src="weatherforecast.js"></script>
+        <h1 class="Title">Weather app</h1>
+        <p style=" text-align: center;">please enter the location 
+            <input type="text" id="locs" onkeypress="activate_places()"><br>
+            <button onclick="detectWeather()">click here!</button>
+            <button onclick="current.currentLocation()">current location!</button>
+            <button onclick="wf.weatherForecast()">weatherForecast!</button>
+            <span id="pos"></span>
+        <!-- <input type="hidden" id="loc_lat" />
+        <input type="hidden" id="loc_long" /> -->
+        </p>
+        <div class="Details">
+            <p style="color: aqua;">The details are as Follows:-</p>
+            <p id="val1"></p>
+            <p id="val2"></p>
+            <p id="val3"></p>
+            <p id="val4"></p>
+
+        </div>
+        <div class = "scroll-containers">
+            <!-- <div id =  -->
+        </div>
+
+        <div class="WeatherDays">
+
+        </div>
+    </body>
+
+</html>
