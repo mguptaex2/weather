@@ -46,6 +46,7 @@ class currloc {
                     this.descvalue = data['weather'][0]['description'];
                     // document.getElementById("val1").innerHTML=country;
                     document.getElementById("val2").innerHTML = "location :-" + this.namevalue ;
+                    ((document.getElementById("locs") as HTMLInputElement).value) = this.namevalue;
                     console.log(this.country);
                     this.tempvalue=(this.tempvalue.toFixed(2));
                     // var kelvin = 273;
@@ -53,7 +54,21 @@ class currloc {
                     console.log(typeof (tempc));
                     var ftemp = (tempc * 9 / 5) + 32;
                     // this.tempconvert();
-                    document.getElementById("val3").innerHTML = "temperature in celsius :- " + tempc.toFixed(2) + " <br> temprature farenheit :-" + ftemp.toFixed(2);
+                    let value = (<HTMLSelectElement>document.getElementById('select')).value;
+                console.log(value);
+                if(value =="celsius")
+                {
+                    document.getElementById("val3").innerHTML = "temperature in celsius :- " + tempc.toFixed(2) ;
+                }
+               
+               else if(value =="kelvin")
+                {
+                    document.getElementById("val3").innerHTML = "temperature in kelvin :- " + this.tempvalue ;
+                }
+                else{
+                    document.getElementById("val3").innerHTML =  " <br> temprature farenheit :-" + ftemp.toFixed(2);
+                }
+                    // document.getElementById("val3").innerHTML = "temperature in celsius :- " + tempc.toFixed(2) + " <br> temprature farenheit :-" + ftemp.toFixed(2);
                     document.getElementById("val4").innerHTML = "description " + this.descvalue;
                     // let test = document.createElement("button");
                     // test.textContent="hello";
