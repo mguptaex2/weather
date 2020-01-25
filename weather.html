@@ -13,54 +13,32 @@
             var auto_comp = new google.maps.places.Autocomplete(input);
         }   
     </script>
-    <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
-    <!-- <script>
-        $(document).ready(function(){
-            $("#b1").click(function(){
-                $("button").append('<div><input type="button" onclick="wf.weatherForecast()"></div>'); 
-            });
-            // $(document).on("click", "a.remove" , function() {
-                // $(this).parent().remove();
-            // });
-        });
-    </script> -->
-    <!-- <script >
-        function testJQueryClick() {
-            $('#b1').off('click').on('click', function () {
-                
-                $(this).parent().remove();
-                return false;
-            });
-        }
-    </script> -->
+   
 </head>
 
 <body>
     <script src="./weatherts.js"></script>
-    <script src="currentlocation.js"></script>
-    <script src="weatherforecast.js"></script>
     <h1 class="Title">Weather app</h1>
-    <p style=" text-align: center;">please enter the location
-        <input type="text" id="locs" onkeypress="activate_places()"><br>
-        <button onclick="wd.detectWeather()">click here!</button>
-        <button onclick="current.currentLocation()">current location!</button>
-        <button id="b1" onclick="wf.weatherForecast()">weatherForecast!</button>
-        <select id="select">
-            <option value="kelvin">kelvin</option>
-            <option value="celsius">celsius</option>
-            <option value="farenheit">farenheit</option>
+    <div class="style1">
+        <p style=" text-align: center;"> Enter the location
+            <input type="text" id="locs" onkeypress="activate_places()">&nbsp;&nbsp;&nbsp;
+            <button onclick="new weatherforecast().detectWeather()">Search</button><br>
+            <div class="button1" style="padding-top: 20px; text-align: center;">
+                <button onclick="new weatherforecast().currentLocation();">current location!</button>&nbsp;&nbsp;&nbsp;
+                <button id="b1" onclick="new weatherforecast().weatherForecast()">weatherForecast!</button>&nbsp;&nbsp;&nbsp;
+                <select id="select">
+                    <option value="kelvin">kelvin</option>
+                    <option value="celsius">celsius</option>
+                    <option value="farenheit">farenheit</option>
 
-        </select>
-        <!-- <ol>
-                <li>list item</li>
-                <li>list item</li>
-                <li>list item</li>
-            </ol> -->
-        <span id="pos"></span>
-        <!-- <input type="hidden" id="loc_lat" />
+                </select>
+            </div>
+    </div>
+    <span id="pos"></span>
+    <!-- <input type="hidden" id="loc_lat" />
         <input type="hidden" id="loc_long" /> -->
     </p>
-    <div class="Details">
+    <div class="Details1">
         <p style="color: aqua;">The details are as Follows:-</p>
         <p id="val1"></p>
         <p id="val2"></p>
@@ -68,20 +46,12 @@
         <p id="val4"></p>
 
     </div>
-    <div class="scroll-containers">
-        <!-- <div id =  -->
+
+    <div class="details"></div>
+    <div class="WeatherDays">
+    
     </div>
 
-    <div class="WeatherDays">
-       
-    </div>
-    <!-- <button>Add new list item</button> -->
-    <!-- <p>Click the above button to dynamically add new list items. You can remove it later.</p> -->
-    <!-- <ol>
-        <li>list item</li>
-        <li>list item</li>
-        <li>list item</li>
-    </ol> -->
 </body>
 
 </html>

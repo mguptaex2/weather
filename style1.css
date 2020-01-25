@@ -4,6 +4,16 @@
     color: grey;
     
 }
+.Details1{
+    width: 350px;
+    height: auto;
+    border: 2px solid #eeeeee;
+    box-shadow: 0px 2px #888888;
+    text-align: center;
+    margin: auto;
+    padding: 20px 20px 20px 20px;
+}
+
 .Details{
     width: 350px;
     height: auto;
@@ -12,6 +22,16 @@
     text-align: center;
     /* margin: auto; */
     padding: 20px 20px 20px 20px;
+}
+.style1
+{
+    border: 1px solid black;
+    background-color: lightblue;
+    padding-top: 50px;
+    padding-right: 30px;
+    padding-bottom: 50px;
+    padding-left: 80px;
+    margin: 25px 50px;
 }
 .WeatherDays{
     width: 100%;
