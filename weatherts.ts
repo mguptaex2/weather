@@ -29,13 +29,14 @@ class Weather_descriptions {
         }
     }
     async detectWeather() {
+        //it will  take location from user and fetch the data from the api.
         let locate = ((document.getElementById("locs") as HTMLInputElement).value);
         let response = await fetch('http://api.weatherstack.com/current?access_key=e3a07aed460ae8a3dddf8c3b9182c739&query=' + locate);
         let data = await response.json();
         return data;
     }
     setWeather() {
-
+        //it will display the data according to the fetched result.
         this.detectWeather().then(data => {
 
             this.namevalue = data['location']['name'];
@@ -59,20 +60,15 @@ class Currloc extends Weather_descriptions {
 
     currentLocation() {
         //it tells the current location of the user.
-        
-            navigator.geolocation.getCurrentPosition((position) => {
+
+        navigator.geolocation.getCurrentPosition((position) => {
             this.longitude = position.coords.longitude;
             this.latitude = position.coords.latitude;
             this.getCurrentWeather();
-           
+
         });
-       }
-
-    
-
+    }
     async currentWeath() {
-        
-
         //It fetches the latitude and longitude from the currentLocation method and displays the data of the current location.   
         let response = await fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + this.latitude + '&lon=' + this.longitude + '&appid=058071b3c7be6c1ba2185d48585c50ad');
         let data = await response.json();
@@ -80,12 +76,13 @@ class Currloc extends Weather_descriptions {
 
     }
     getCurrentWeather() {
+        //It displays the weather of cuurent location.
         this.currentWeath().then(data => {
             this.namevalue = data['name'];
             this.country = data['sys']['country'];
             this.tempvalue = data['main']['temp'];
             this.descvalue = data['weather'][0]['description'];
-            
+
             document.getElementById("val2").innerHTML = "location :-" + this.namevalue;
             ((document.getElementById("locs") as HTMLInputElement).value) = this.namevalue;
             console.log(this.country);
@@ -97,15 +94,15 @@ class Currloc extends Weather_descriptions {
             document.getElementById("val4").innerHTML = "description " + this.descvalue;
 
         });
-       
+
     }
 }
 
 class WeatherForecast extends Currloc {
     time: any;
     pressure: any;
-    
-        weatherForecast() {
+
+    weatherForecast() {
         // It fetches the current location or the location enetred by user and calls weatherFore to dispay the weather forecast.
         if (((document.getElementById("locs") as HTMLInputElement).value) === "") {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -114,21 +111,21 @@ class WeatherForecast extends Currloc {
                 this.weatherFore();
                 console.log(position.coords);
             });
-              
-            
+
+
         }
         else {
-            
+
             this.detectWeather().then(data => {
                 this.latitude = data['location']['lat'];
                 this.longitude = data['location']['lon'];
                 this.weatherFore();
             });
-              
+
         }
     }
     weatherFore() {
-       
+
         //It shows the weather forecast of a particular city or the user's current location.
         return fetch('https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/9799c5aedd90c08edac7f8af73c81ba9/' + this.latitude + ',' + this.longitude)
             .then(response => {
@@ -137,10 +134,9 @@ class WeatherForecast extends Currloc {
                 var hourdata = '';
                 var length = Object.keys(data['daily']['data']).length;
                 console.log(length);
-                var childCount=document.getElementById("weatherDetails").childElementCount;
+                var childCount = document.getElementById("weatherDetails").childElementCount;
 
-                for (var i = 0; i < length; i++)
-                 {
+                for (var i = 0; i < length; i++) {
                     this.time = data['daily']['data'][i]['time'];
                     this.tempvalue = data['daily']['data'][i]['temperatureLow'];
                     this.pressure = data['daily']['data'][i]['pressure'];
@@ -150,25 +146,28 @@ class WeatherForecast extends Currloc {
                     var year = date.getFullYear();
                     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                     var month = months[date.getMonth()];
-                    
+
                     var formattedTime = date1 + '-' + month + '-' + year;
                     this.setTemp();
                     hourdata = " " + formattedTime + "<br><b>Temp </b>:- " + this.temp + "<br><b>Pressure is</b>:- " + this.pressure + "<br><b>Summary is :-</b>" + this.descvalue + " <br>";
                     var temp22 = document.createElement("div");
                     temp22.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
                     temp22.classList.add("Details");
-                    temp22.setAttribute("id","det"+i);
-                    if(childCount === 8){
+                    temp22.setAttribute("id", "det" + i);
+                    if (childCount > 0) {
                         console.log("replaccing child1");
-                     let node = document.getElementById("det"+i);
-                        node.parentNode.replaceChild(temp22,node);
-                    }else{
+                        let node = document.getElementById("det" + i);
+                        node.parentNode.replaceChild(temp22, node);
+                        
+                    } 
+                    else {
                         document.getElementById("weatherDetails").appendChild(temp22);
+                         
                     }
-                  
+
 
                 }
-                
+
             })
             .catch((error: Error) => {
                 alert("valid not");

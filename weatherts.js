@@ -133,6 +133,7 @@ var Currloc = /** @class */ (function (_super) {
     };
     Currloc.prototype.getCurrentWeather = function () {
         var _this = this;
+        //It displays the weather of cuurent location.
         this.currentWeath().then(function (data) {
             _this.namevalue = data['name'];
             _this.country = data['sys']['country'];
@@ -202,13 +203,14 @@ var WeatherForecast = /** @class */ (function (_super) {
                 temp22.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
                 temp22.classList.add("Details");
                 temp22.setAttribute("id", "det" + i);
-                if (childCount === 8) {
+                if (childCount > 0) {
                     console.log("replaccing child1");
                     var node = document.getElementById("det" + i);
                     node.parentNode.replaceChild(temp22, node);
                 }
                 else {
                     document.getElementById("weatherDetails").appendChild(temp22);
+                    // childCount = childCount -1;
                 }
             }
         })["catch"](function (error) {
