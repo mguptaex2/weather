@@ -50,15 +50,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var Weather_descriptions = /** @class */ (function () {
     function Weather_descriptions() {
     }
-    Weather_descriptions.prototype.Weather_descriptions = function (latitude, namevalue, country, tempvalue, descvalue, longitude, temp) {
-        this.latitude = latitude;
-        this.namevalue = namevalue;
-        this.country = country;
-        this.tempvalue = tempvalue;
-        this.descvalue = descvalue;
-        this.longitude = longitude;
-        this.temp = temp;
-    };
     Weather_descriptions.prototype.setTemp = function () {
         //it will calculate the temperature values in celsius ,farenheit and kelvin.
         var ftemp = (this.tempvalue * 9 / 5) + 32;
@@ -116,13 +107,12 @@ var Currloc = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Currloc.prototype.currentLocation = function () {
-        var _this = this;
         //it tells the current location of the user.
+        var _this = this;
         navigator.geolocation.getCurrentPosition(function (position) {
             _this.longitude = position.coords.longitude;
             _this.latitude = position.coords.latitude;
             _this.getCurrentWeather();
-            console.log(position.coords);
         });
     };
     Currloc.prototype.currentWeath = function () {
@@ -145,10 +135,9 @@ var Currloc = /** @class */ (function (_super) {
         var _this = this;
         this.currentWeath().then(function (data) {
             _this.namevalue = data['name'];
-            _this.country = data['country'];
+            _this.country = data['sys']['country'];
             _this.tempvalue = data['main']['temp'];
             _this.descvalue = data['weather'][0]['description'];
-            // document.getElementById("val1").innerHTML=country;
             document.getElementById("val2").innerHTML = "location :-" + _this.namevalue;
             (document.getElementById("locs").value) = _this.namevalue;
             console.log(_this.country);
@@ -166,25 +155,16 @@ var WeatherForecast = /** @class */ (function (_super) {
     function WeatherForecast() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    WeatherForecast.prototype.WeatherForecast = function (time, pressure) {
-        this.time = time;
-        this.pressure = pressure;
-    };
-    WeatherForecast.prototype.currentLoc = function () {
-        var _this = this;
-        navigator.geolocation.getCurrentPosition(function (position) {
-            _this.longitude = position.coords.longitude;
-            _this.latitude = position.coords.latitude;
-            _this.weatherFore();
-            console.log(position.coords);
-        });
-    };
     WeatherForecast.prototype.weatherForecast = function () {
         var _this = this;
         // It fetches the current location or the location enetred by user and calls weatherFore to dispay the weather forecast.
-        if ((document.getElementById("locs").value) == "") {
-            this.currentLoc();
-            console.log("1");
+        if ((document.getElementById("locs").value) === "") {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                _this.longitude = position.coords.longitude;
+                _this.latitude = position.coords.latitude;
+                _this.weatherFore();
+                console.log(position.coords);
+            });
         }
         else {
             this.detectWeather().then(function (data) {
@@ -201,10 +181,10 @@ var WeatherForecast = /** @class */ (function (_super) {
             .then(function (response) {
             return response.json();
         }).then(function (data) {
-            console.log('1');
             var hourdata = '';
             var length = Object.keys(data['daily']['data']).length;
             console.log(length);
+            var childCount = document.getElementById("weatherDetails").childElementCount;
             for (var i = 0; i < length; i++) {
                 _this.time = data['daily']['data'][i]['time'];
                 _this.tempvalue = data['daily']['data'][i]['temperatureLow'];
@@ -215,14 +195,21 @@ var WeatherForecast = /** @class */ (function (_super) {
                 var year = date.getFullYear();
                 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                 var month = months[date.getMonth()];
-                // Will display time in 10:30:23 format
                 var formattedTime = date1 + '-' + month + '-' + year;
                 _this.setTemp();
                 hourdata = " " + formattedTime + "<br><b>Temp </b>:- " + _this.temp + "<br><b>Pressure is</b>:- " + _this.pressure + "<br><b>Summary is :-</b>" + _this.descvalue + " <br>";
                 var temp22 = document.createElement("div");
                 temp22.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
                 temp22.classList.add("Details");
-                document.querySelector(".WeatherDays").appendChild(temp22);
+                temp22.setAttribute("id", "det" + i);
+                if (childCount === 8) {
+                    console.log("replaccing child1");
+                    var node = document.getElementById("det" + i);
+                    node.parentNode.replaceChild(temp22, node);
+                }
+                else {
+                    document.getElementById("weatherDetails").appendChild(temp22);
+                }
             }
         })["catch"](function (error) {
             alert("valid not");

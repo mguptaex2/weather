@@ -8,18 +8,6 @@ class Weather_descriptions {
     longitude: number;
     temp: string;
 
-    Weather_descriptions(latitude: number, namevalue: string, country: string, tempvalue: number, descvalue: string, longitude: number, temp: string) {
-        this.latitude = latitude;
-        this.namevalue = namevalue;
-        this.country = country;
-        this.tempvalue = tempvalue;
-        this.descvalue = descvalue;
-        this.longitude = longitude;
-        this.temp = temp;
-
-    }
-
-
     setTemp() {
         //it will calculate the temperature values in celsius ,farenheit and kelvin.
 
@@ -71,16 +59,19 @@ class Currloc extends Weather_descriptions {
 
     currentLocation() {
         //it tells the current location of the user.
-        navigator.geolocation.getCurrentPosition((position) => {
+        
+            navigator.geolocation.getCurrentPosition((position) => {
             this.longitude = position.coords.longitude;
             this.latitude = position.coords.latitude;
             this.getCurrentWeather();
-            console.log(position.coords);
+           
         });
+       }
 
-    }
+    
 
     async currentWeath() {
+        
 
         //It fetches the latitude and longitude from the currentLocation method and displays the data of the current location.   
         let response = await fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + this.latitude + '&lon=' + this.longitude + '&appid=058071b3c7be6c1ba2185d48585c50ad');
@@ -91,10 +82,10 @@ class Currloc extends Weather_descriptions {
     getCurrentWeather() {
         this.currentWeath().then(data => {
             this.namevalue = data['name'];
-            this.country = data['country'];
+            this.country = data['sys']['country'];
             this.tempvalue = data['main']['temp'];
             this.descvalue = data['weather'][0]['description'];
-            // document.getElementById("val1").innerHTML=country;
+            
             document.getElementById("val2").innerHTML = "location :-" + this.namevalue;
             ((document.getElementById("locs") as HTMLInputElement).value) = this.namevalue;
             console.log(this.country);
@@ -113,29 +104,18 @@ class Currloc extends Weather_descriptions {
 class WeatherForecast extends Currloc {
     time: any;
     pressure: any;
-    WeatherForecast(time: any, pressure: any) {
-        this.time = time;
-        this.pressure = pressure;
-
-    }
-
-    currentLoc() {
-
-        navigator.geolocation.getCurrentPosition((position) => {
-            this.longitude = position.coords.longitude;
-            this.latitude = position.coords.latitude;
-            this.weatherFore();
-            console.log(position.coords);
-        });
-
-    }
-
-
-    weatherForecast() {
+    
+        weatherForecast() {
         // It fetches the current location or the location enetred by user and calls weatherFore to dispay the weather forecast.
-        if (((document.getElementById("locs") as HTMLInputElement).value) == "") {
-            this.currentLoc();
-            console.log("1");
+        if (((document.getElementById("locs") as HTMLInputElement).value) === "") {
+            navigator.geolocation.getCurrentPosition((position) => {
+                this.longitude = position.coords.longitude;
+                this.latitude = position.coords.latitude;
+                this.weatherFore();
+                console.log(position.coords);
+            });
+              
+            
         }
         else {
             
@@ -148,43 +128,47 @@ class WeatherForecast extends Currloc {
         }
     }
     weatherFore() {
+       
         //It shows the weather forecast of a particular city or the user's current location.
         return fetch('https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/9799c5aedd90c08edac7f8af73c81ba9/' + this.latitude + ',' + this.longitude)
             .then(response => {
-
                 return response.json()
             }).then(data => {
-                console.log('1');
-
                 var hourdata = '';
-
                 var length = Object.keys(data['daily']['data']).length;
                 console.log(length);
+                var childCount=document.getElementById("weatherDetails").childElementCount;
 
-                for (var i = 0; i < length; i++) {
+                for (var i = 0; i < length; i++)
+                 {
                     this.time = data['daily']['data'][i]['time'];
                     this.tempvalue = data['daily']['data'][i]['temperatureLow'];
                     this.pressure = data['daily']['data'][i]['pressure'];
                     this.descvalue = data['daily']['data'][i]['summary'];
-
                     var date = new Date(this.time * 1000);
-
                     var date1 = date.getDate();
                     var year = date.getFullYear();
                     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                     var month = months[date.getMonth()];
-
-                    // Will display time in 10:30:23 format
+                    
                     var formattedTime = date1 + '-' + month + '-' + year;
                     this.setTemp();
-
                     hourdata = " " + formattedTime + "<br><b>Temp </b>:- " + this.temp + "<br><b>Pressure is</b>:- " + this.pressure + "<br><b>Summary is :-</b>" + this.descvalue + " <br>";
-                    let temp22 = document.createElement("div");
+                    var temp22 = document.createElement("div");
                     temp22.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
                     temp22.classList.add("Details");
-                    document.querySelector(".WeatherDays").appendChild(temp22);
+                    temp22.setAttribute("id","det"+i);
+                    if(childCount === 8){
+                        console.log("replaccing child1");
+                     let node = document.getElementById("det"+i);
+                        node.parentNode.replaceChild(temp22,node);
+                    }else{
+                        document.getElementById("weatherDetails").appendChild(temp22);
+                    }
+                  
 
                 }
+                
             })
             .catch((error: Error) => {
                 alert("valid not");

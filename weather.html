@@ -24,7 +24,7 @@
             <input type="text" id="locs" onkeypress="activate_places()">&nbsp;&nbsp;&nbsp;
             <button onclick="new WeatherForecast().setWeather()">Search</button><br>
             <div class="button1" style="padding-top: 20px; text-align: center;">
-                <button onclick="new WeatherForecast().currentLocation();">current location!</button>&nbsp;&nbsp;&nbsp;
+                <button onclick="new WeatherForecast().  currentLocation();">current location!</button>&nbsp;&nbsp;&nbsp;
                 <button id="b1" onclick="new WeatherForecast().weatherForecast()">weatherForecast!</button>&nbsp;&nbsp;&nbsp;
                 <select id="select">
                     <option value="kelvin">kelvin</option>
@@ -34,9 +34,8 @@
                 </select>
             </div>
     </div>
-    <span id="pos"></span>
-    <!-- <input type="hidden" id="loc_lat" />
-        <input type="hidden" id="loc_long" /> -->
+    
+   
     </p>
     <div class="Details1">
         <p style="color: aqua;">The details are as Follows:-</p>
@@ -50,7 +49,7 @@
     <div class="details">
         <p id = "p"></p>
     </div>
-    <div class="WeatherDays">
+    <div class="WeatherDays"id="weatherDetails">
         
           
     </div>
