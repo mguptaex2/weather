@@ -22,10 +22,10 @@
     <div class="style1">
         <p style=" text-align: center;"> Enter the location
             <input type="text" id="locs" onkeypress="activate_places()">&nbsp;&nbsp;&nbsp;
-            <button onclick="new weatherforecast().detectWeather()">Search</button><br>
+            <button onclick="new WeatherForecast().setWeather()">Search</button><br>
             <div class="button1" style="padding-top: 20px; text-align: center;">
-                <button onclick="new weatherforecast().currentLocation();">current location!</button>&nbsp;&nbsp;&nbsp;
-                <button id="b1" onclick="new weatherforecast().weatherForecast()">weatherForecast!</button>&nbsp;&nbsp;&nbsp;
+                <button onclick="new WeatherForecast().currentLocation();">current location!</button>&nbsp;&nbsp;&nbsp;
+                <button id="b1" onclick="new WeatherForecast().weatherForecast()">weatherForecast!</button>&nbsp;&nbsp;&nbsp;
                 <select id="select">
                     <option value="kelvin">kelvin</option>
                     <option value="celsius">celsius</option>
@@ -46,10 +46,13 @@
         <p id="val4"></p>
 
     </div>
-
-    <div class="details"></div>
+  
+    <div class="details">
+        <p id = "p"></p>
+    </div>
     <div class="WeatherDays">
-    
+        
+          
     </div>
 
 </body>
