@@ -22,11 +22,11 @@
     <div class="style1">
         <p style=" text-align: center;"> Enter the location
             <input type="text" id="locs" onkeypress="activate_places()">&nbsp;&nbsp;&nbsp;
-            <button onclick="new WeatherDisplay().bindDataFromApi()">Search</button><br>
+            <button onclick="new GetApi().bindDataFromApi()">Search</button><br>
             <div class="button1" style="padding-top: 20px; text-align: center;">
-                <button onclick="new Currloc().currentLocationOfUser();">current location!</button>&nbsp;&nbsp;&nbsp;
+                <button onclick="new CurrentLocation().currentLocationOfUser();">current location!</button>&nbsp;&nbsp;&nbsp;
                 <button id="b1" onclick="new WeatherForecast().weatherForecast()">weatherForecast!</button>&nbsp;&nbsp;&nbsp;
-                <select id="select">
+                <select id="select" onchange="new WeatherForecast().changeTemperature()">
                     <option value="kelvin">kelvin</option>
                     <option value="celsius">celsius</option>
                     <option value="farenheit">farenheit</option>

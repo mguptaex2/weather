@@ -15,15 +15,32 @@ class WeatherDisplay {
         let kelvintemperature: number = (this.temperature + 273.15);
         let value = (<HTMLSelectElement>document.getElementById('select')).value;
         if (value == "celsius") {
-            this.temp = "temperature in celsius :- " + this.temperature.toFixed(2);
+            this.temp = "Temperature in celsius :- " + this.temperature.toFixed(2);
         }
         else if (value == "kelvin") {
-            this.temp = "temperature in kelvin :- " + kelvintemperature.toFixed(2);
+            this.temp = "Temperature in kelvin :- " + kelvintemperature.toFixed(2);
         }
         else {
-            this.temp = "temperature in farenheit :-" + farenheittemperature.toFixed(2);
+            this.temp = "Temperature in farenheit :-" + farenheittemperature.toFixed(2);
         }
     }
+   
+    displayWeatherOnHtml() 
+    {
+        this.temperatureConvert();
+        document.getElementById("val2").textContent = "location :-" + this.city + "," + this.country;
+        document.getElementById("val3").innerHTML = this.temp + " <br>";
+        document.getElementById("val4").innerHTML = "description " + this.description;
+        if (document.getElementById("weatherDetails"))
+         {
+               document.getElementById("weatherDetails").remove();
+         }
+
+    }
+
+}
+class GetApi extends WeatherDisplay
+{
     async getApiCall(URL) {
 
         let response = await fetch(URL);
@@ -32,7 +49,7 @@ class WeatherDisplay {
     }
     bindDataFromApi()
     {
-        //it will display the data according to the fetched response from the user.
+        //it will fetch the data according to the fetched response from the user.
         let location = ((document.getElementById("locs") as HTMLInputElement).value);
         let URL = 'http://api.weatherstack.com/current?access_key=e3a07aed460ae8a3dddf8c3b9182c739&query=' + location;
         this.getApiCall(URL).then(data => 
@@ -48,21 +65,8 @@ class WeatherDisplay {
             });
 
     }
-    displayWeatherOnHtml() 
-    {
-        this.temperatureConvert();
-        document.getElementById("val2").textContent = "location :-" + this.city + "," + this.country;
-        document.getElementById("val3").innerHTML = this.temp + " <br>";
-        document.getElementById("val4").innerHTML = "description " + this.description;
-        if (document.getElementById("weatherDetails"))
-         {
-               document.getElementById("weatherDetails").remove();
-         }
-
-    }
-
 }
-class Currloc extends WeatherDisplay {
+class CurrentLocation extends GetApi {
 
     currentLocationOfUser() 
     {
@@ -93,7 +97,7 @@ class Currloc extends WeatherDisplay {
 
     }
 }
-class WeatherForecast extends WeatherDisplay
+class WeatherForecast extends CurrentLocation
  {
         time: any;
         pressure: any;
@@ -150,21 +154,35 @@ class WeatherForecast extends WeatherDisplay
                 var formattedDate = this.convertDateToFormat();
                 this.temperatureConvert();
                 hourdata = " " + formattedDate + "<br><b>Temp </b>:- " + this.temp + "<br><b>Pressure is</b>:- " + this.pressure + "<br><b>Summary is :-</b>" + this.description + " <br>";
-                var temp22 = document.createElement("div");
-                temp22.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
-                temp22.classList.add("Details");
-                temp22.setAttribute("id", "det" + i);
+                var displayData = document.createElement("div");
+                displayData.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
+                displayData.classList.add("Details");
+                displayData.setAttribute("id", "det" + i);
                 if (childCount > 0) {
                     let node = document.getElementById("det" + i);
-                    node.parentNode.replaceChild(temp22, node);
+                    node.parentNode.replaceChild(displayData, node);
 
                 }
                  else {
-                    document.getElementById("weatherDetails").appendChild(temp22);
+                    document.getElementById("weatherDetails").appendChild(displayData);
                     childCount = childCount - 1;
 
                 }
             }
         });
     }
+    changeTemperature()
+    {
+        
+             if (document.getElementById("weatherDetails"))
+            {
+                this.weatherForecast();
+        
+            }
+            else
+            {
+                this.bindDataFromApi();
+            }
+    }
 }
+

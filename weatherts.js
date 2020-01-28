@@ -52,23 +52,36 @@ var WeatherDisplay = /** @class */ (function () {
     }
     WeatherDisplay.prototype.temperatureConvert = function () {
         //it will calculate the temperature values in celsius ,farenheit and kelvin.
-        var ftemp = (this.temperature * 9 / 5) + 32;
-        var ktemp = (this.temperature + 273.15);
+        var farenheittemperature = (this.temperature * 9 / 5) + 32;
+        var kelvintemperature = (this.temperature + 273.15);
         var value = document.getElementById('select').value;
         if (value == "celsius") {
-            this.temp = "temperature in celsius :- " + this.temperature.toFixed(2);
-            document.getElementById("val3").innerHTML = this.temp + " <br>";
+            this.temp = "Temperature in celsius :- " + this.temperature.toFixed(2);
         }
         else if (value == "kelvin") {
-            this.temp = "temperature in kelvin :- " + ktemp.toFixed(2);
-            document.getElementById("val3").innerHTML = this.temp + " <br>";
+            this.temp = "Temperature in kelvin :- " + kelvintemperature.toFixed(2);
         }
         else {
-            this.temp = "temperature in farenheit :-" + ftemp.toFixed(2);
-            document.getElementById("val3").innerHTML = this.temp + " <br>";
+            this.temp = "Temperature in farenheit :-" + farenheittemperature.toFixed(2);
         }
     };
-    WeatherDisplay.prototype.getApiCall = function (URL) {
+    WeatherDisplay.prototype.displayWeatherOnHtml = function () {
+        this.temperatureConvert();
+        document.getElementById("val2").textContent = "location :-" + this.city + "," + this.country;
+        document.getElementById("val3").innerHTML = this.temp + " <br>";
+        document.getElementById("val4").innerHTML = "description " + this.description;
+        if (document.getElementById("weatherDetails")) {
+            document.getElementById("weatherDetails").remove();
+        }
+    };
+    return WeatherDisplay;
+}());
+var GetApi = /** @class */ (function (_super) {
+    __extends(GetApi, _super);
+    function GetApi() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    GetApi.prototype.getApiCall = function (URL) {
         return __awaiter(this, void 0, void 0, function () {
             var response, data;
             return __generator(this, function (_a) {
@@ -84,9 +97,9 @@ var WeatherDisplay = /** @class */ (function () {
             });
         });
     };
-    WeatherDisplay.prototype.bindDataFromApi = function () {
+    GetApi.prototype.bindDataFromApi = function () {
         var _this = this;
-        //it will display the data according to the fetched response from the user.
+        //it will fetch the data according to the fetched response from the user.
         var location = (document.getElementById("locs").value);
         var URL = 'http://api.weatherstack.com/current?access_key=e3a07aed460ae8a3dddf8c3b9182c739&query=' + location;
         this.getApiCall(URL).then(function (data) {
@@ -99,23 +112,14 @@ var WeatherDisplay = /** @class */ (function () {
             _this.displayWeatherOnHtml();
         });
     };
-    WeatherDisplay.prototype.displayWeatherOnHtml = function () {
-        this.temperatureConvert();
-        document.getElementById("val2").textContent = "location :-" + this.city + "," + this.country;
-        // document.getElementById("val3").innerHTML = this.temp + " <br>";
-        document.getElementById("val4").innerHTML = "description " + this.description;
-        if (document.getElementById("weatherDetails")) {
-            document.getElementById("weatherDetails").remove();
-        }
-    };
-    return WeatherDisplay;
-}());
-var Currloc = /** @class */ (function (_super) {
-    __extends(Currloc, _super);
-    function Currloc() {
+    return GetApi;
+}(WeatherDisplay));
+var CurrentLocation = /** @class */ (function (_super) {
+    __extends(CurrentLocation, _super);
+    function CurrentLocation() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Currloc.prototype.currentLocationOfUser = function () {
+    CurrentLocation.prototype.currentLocationOfUser = function () {
         var _this = this;
         //it tells the current location of the user.
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -124,7 +128,7 @@ var Currloc = /** @class */ (function (_super) {
             _this.getCurrentWeather();
         });
     };
-    Currloc.prototype.getCurrentWeather = function () {
+    CurrentLocation.prototype.getCurrentWeather = function () {
         var _this = this;
         //It displays the weather of cuurent location.
         var URL = 'https://api.openweathermap.org/data/2.5/weather?lat=' + this.latitude + '&lon=' + this.longitude + '&appid=058071b3c7be6c1ba2185d48585c50ad';
@@ -138,8 +142,8 @@ var Currloc = /** @class */ (function (_super) {
             _this.displayWeatherOnHtml();
         });
     };
-    return Currloc;
-}(WeatherDisplay));
+    return CurrentLocation;
+}(GetApi));
 var WeatherForecast = /** @class */ (function (_super) {
     __extends(WeatherForecast, _super);
     function WeatherForecast() {
@@ -193,20 +197,28 @@ var WeatherForecast = /** @class */ (function (_super) {
                 var formattedDate = _this.convertDateToFormat();
                 _this.temperatureConvert();
                 hourdata = " " + formattedDate + "<br><b>Temp </b>:- " + _this.temp + "<br><b>Pressure is</b>:- " + _this.pressure + "<br><b>Summary is :-</b>" + _this.description + " <br>";
-                var temp22 = document.createElement("div");
-                temp22.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
-                temp22.classList.add("Details");
-                temp22.setAttribute("id", "det" + i);
+                var displayData = document.createElement("div");
+                displayData.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
+                displayData.classList.add("Details");
+                displayData.setAttribute("id", "det" + i);
                 if (childCount > 0) {
                     var node = document.getElementById("det" + i);
-                    node.parentNode.replaceChild(temp22, node);
+                    node.parentNode.replaceChild(displayData, node);
                 }
                 else {
-                    document.getElementById("weatherDetails").appendChild(temp22);
+                    document.getElementById("weatherDetails").appendChild(displayData);
                     childCount = childCount - 1;
                 }
             }
         });
     };
+    WeatherForecast.prototype.changeTemperature = function () {
+        if (document.getElementById("weatherDetails")) {
+            this.weatherForecast();
+        }
+        else {
+            this.bindDataFromApi();
+        }
+    };
     return WeatherForecast;
-}(WeatherDisplay));
+}(CurrentLocation));
