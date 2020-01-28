@@ -57,12 +57,15 @@ var Weather_descriptions = /** @class */ (function () {
         var value = document.getElementById('select').value;
         if (value == "celsius") {
             this.temp = "temperature in celsius :- " + this.tempvalue.toFixed(2);
+            document.getElementById("val3").innerHTML = this.temp + " <br>";
         }
         else if (value == "kelvin") {
             this.temp = "temperature in kelvin :- " + ktemp.toFixed(2);
+            document.getElementById("val3").innerHTML = this.temp + " <br>";
         }
         else {
             this.temp = "temprature in farenheit :-" + ftemp.toFixed(2);
+            document.getElementById("val3").innerHTML = this.temp + " <br>";
         }
     };
     Weather_descriptions.prototype.detectWeather = function () {
@@ -85,6 +88,7 @@ var Weather_descriptions = /** @class */ (function () {
     };
     Weather_descriptions.prototype.setWeather = function () {
         var _this = this;
+        //it will display the data according to the fetched response from the user.
         this.detectWeather().then(function (data) {
             _this.namevalue = data['location']['name'];
             _this.country = data['location']['country'];
@@ -98,6 +102,9 @@ var Weather_descriptions = /** @class */ (function () {
             document.getElementById("val4").innerHTML = "description " + _this.descvalue;
             console.log(data);
         });
+        if (document.getElementById("weatherDetails")) {
+            document.getElementById("weatherDetails").remove();
+        }
     };
     return Weather_descriptions;
 }());
@@ -148,6 +155,9 @@ var Currloc = /** @class */ (function (_super) {
             document.getElementById("val3").innerHTML = _this.temp + " <br>";
             document.getElementById("val4").innerHTML = "description " + _this.descvalue;
         });
+        if (document.getElementById("weatherDetails")) {
+            document.getElementById("weatherDetails").remove();
+        }
     };
     return Currloc;
 }(Weather_descriptions));
@@ -158,7 +168,7 @@ var WeatherForecast = /** @class */ (function (_super) {
     }
     WeatherForecast.prototype.weatherForecast = function () {
         var _this = this;
-        // It fetches the current location or the location enetred by user and calls weatherFore to dispay the weather forecast.
+        // It fetches the current location or the location enetred by user and calls weatherFore to display the weather forecast.
         if ((document.getElementById("locs").value) === "") {
             navigator.geolocation.getCurrentPosition(function (position) {
                 _this.longitude = position.coords.longitude;
@@ -210,7 +220,6 @@ var WeatherForecast = /** @class */ (function (_super) {
                 }
                 else {
                     document.getElementById("weatherDetails").appendChild(temp22);
-                    // childCount = childCount -1;
                 }
             }
         })["catch"](function (error) {

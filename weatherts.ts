@@ -36,7 +36,7 @@ class Weather_descriptions {
         return data;
     }
     setWeather() {
-        //it will display the data according to the fetched result.
+        //it will display the data according to the fetched response from the user.
         this.detectWeather().then(data => {
 
             this.namevalue = data['location']['name'];
@@ -52,6 +52,10 @@ class Weather_descriptions {
             document.getElementById("val4").innerHTML = "description " + this.descvalue;
             console.log(data)
         });
+        if(document.getElementById("weatherDetails"))
+        {
+            document.getElementById("weatherDetails").remove();
+        }
     }
 
 }
@@ -60,7 +64,7 @@ class Currloc extends Weather_descriptions {
 
     currentLocation() {
         //it tells the current location of the user.
-
+       
         navigator.geolocation.getCurrentPosition((position) => {
             this.longitude = position.coords.longitude;
             this.latitude = position.coords.latitude;
@@ -94,7 +98,10 @@ class Currloc extends Weather_descriptions {
             document.getElementById("val4").innerHTML = "description " + this.descvalue;
 
         });
-
+        if(document.getElementById("weatherDetails"))
+        {
+            document.getElementById("weatherDetails").remove();
+        }
     }
 }
 
@@ -103,7 +110,7 @@ class WeatherForecast extends Currloc {
     pressure: any;
 
     weatherForecast() {
-        // It fetches the current location or the location enetred by user and calls weatherFore to dispay the weather forecast.
+        // It fetches the current location or the location enetred by user and calls weatherFore to display the weather forecast.
         if (((document.getElementById("locs") as HTMLInputElement).value) === "") {
             navigator.geolocation.getCurrentPosition((position) => {
                 this.longitude = position.coords.longitude;
@@ -159,8 +166,7 @@ class WeatherForecast extends Currloc {
                         let node = document.getElementById("det" + i);
                         node.parentNode.replaceChild(temp22, node);
                         
-                    } 
-                    else {
+                    } else {
                         document.getElementById("weatherDetails").appendChild(temp22);
                          
                     }
