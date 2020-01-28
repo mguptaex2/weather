@@ -70,9 +70,10 @@ var WeatherDisplay = /** @class */ (function () {
         document.getElementById("val2").textContent = "location :-" + this.city + "," + this.country;
         document.getElementById("val3").innerHTML = this.temp + " <br>";
         document.getElementById("val4").innerHTML = "description " + this.description;
-        if (document.getElementById("weatherDetails")) {
-            document.getElementById("weatherDetails").remove();
-        }
+        // if (document.getElementById("weatherDetails"))
+        //  {
+        //        document.getElementById("weatherDetails").innerHTML = "";
+        //  }
     };
     return WeatherDisplay;
 }());
@@ -158,8 +159,8 @@ var WeatherForecast = /** @class */ (function (_super) {
         });
     };
     WeatherForecast.prototype.weatherForecast = function () {
+        // It fetches the current location or the location entered by user and calls weatherFore to display the weather forecast.
         var _this = this;
-        // It fetches the current location or the location enetred by user and calls weatherFore to display the weather forecast.
         if ((document.getElementById("locs").value) === "") {
             this.weatherForecastOfCurrentLocation();
         }
@@ -183,13 +184,19 @@ var WeatherForecast = /** @class */ (function (_super) {
         return formattedDate;
     };
     WeatherForecast.prototype.bindDataFromApiForWeatherForecast = function () {
+        //document.getElementById("Details1").remove();
         var _this = this;
         var URL = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/9799c5aedd90c08edac7f8af73c81ba9/' + this.latitude + ',' + this.longitude;
         this.getApiCall(URL).then(function (data) {
             var hourdata = '';
             var length = Object.keys(data['daily']['data']).length;
+            //            console.log("1");
             var childCount = document.getElementById("weatherDetails").childElementCount;
             for (var i = 0; i < length; i++) {
+                document.getElementById("val1").innerHTML = "";
+                document.getElementById("val2").innerHTML = "";
+                document.getElementById("val3").innerHTML = "";
+                document.getElementById("val4").innerHTML = "";
                 _this.time = data['daily']['data'][i]['time'];
                 _this.temperature = data['daily']['data'][i]['temperatureLow'];
                 _this.pressure = data['daily']['data'][i]['pressure'];

@@ -31,10 +31,10 @@ class WeatherDisplay {
         document.getElementById("val2").textContent = "location :-" + this.city + "," + this.country;
         document.getElementById("val3").innerHTML = this.temp + " <br>";
         document.getElementById("val4").innerHTML = "description " + this.description;
-        if (document.getElementById("weatherDetails"))
-         {
-               document.getElementById("weatherDetails").remove();
-         }
+        // if (document.getElementById("weatherDetails"))
+        //  {
+        //        document.getElementById("weatherDetails").innerHTML = "";
+        //  }
 
     }
 
@@ -82,6 +82,8 @@ class CurrentLocation extends GetApi {
 
     getCurrentWeather()
     {
+
+        
         //It displays the weather of cuurent location.
         let URL = 'https://api.openweathermap.org/data/2.5/weather?lat=' + this.latitude + '&lon=' + this.longitude + '&appid=058071b3c7be6c1ba2185d48585c50ad'
         this.getApiCall(URL).then(data => 
@@ -114,7 +116,8 @@ class WeatherForecast extends CurrentLocation
     }
     weatherForecast() 
     {
-        // It fetches the current location or the location enetred by user and calls weatherFore to display the weather forecast.
+        // It fetches the current location or the location entered by user and calls weatherFore to display the weather forecast.
+        
         if (((document.getElementById("locs") as HTMLInputElement).value) === "") 
         {
             this.weatherForecastOfCurrentLocation();
@@ -141,12 +144,20 @@ class WeatherForecast extends CurrentLocation
         return formattedDate;
     }
     bindDataFromApiForWeatherForecast() {
+        //document.getElementById("Details1").remove();
+    
         let URL = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/9799c5aedd90c08edac7f8af73c81ba9/' + this.latitude + ',' + this.longitude;
         this.getApiCall(URL).then(data => {
             var hourdata = '';
             var length = Object.keys(data['daily']['data']).length;
+//            console.log("1");
+           
             var childCount = document.getElementById("weatherDetails").childElementCount;
             for (var i = 0; i < length; i++) {
+                document.getElementById("val1").innerHTML = "";
+                document.getElementById("val2").innerHTML = "";
+                document.getElementById("val3").innerHTML = "";
+                document.getElementById("val4").innerHTML = "";
                 this.time = data['daily']['data'][i]['time'];
                 this.temperature = data['daily']['data'][i]['temperatureLow'];
                 this.pressure = data['daily']['data'][i]['pressure'];
