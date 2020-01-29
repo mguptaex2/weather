@@ -1,17 +1,22 @@
 const path = require('path');
 
 module.exports = {
-    entry: path.join(__dirname, '/weatherts.ts'),
+    mode: 'development',
+    entry: path.join(__dirname, '/weatherforecast.ts'),
     output: {
-        filename: 'weatherts.js',
-        path: __dirname
+        filename: 'bundle.js',
+        path: __dirname,
+        library: 'WeatherForecast',
+        libraryTarget:'var',
+        libraryExport:'default'
     },
+    devtool: 'inline-source-map',
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
+                test: /\.ts?$/,
                 loader: 'ts-loader',
-                exclude: /node_modules/,
+                exclude: /node_modules/
             },
         ]
     },

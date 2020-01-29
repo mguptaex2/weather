@@ -1,5 +1,5 @@
 import {CurrentLocation} from "./currentlocation"; 
-class WeatherForecast extends CurrentLocation
+export default class WeatherForecast extends CurrentLocation
  {
         time: any;
         pressure: any;
@@ -47,12 +47,12 @@ class WeatherForecast extends CurrentLocation
         this.getApiCall(URL).then(data => {
             var hourdata = '';
             var length = Object.keys(data['daily']['data']).length;
-            var childCount = document.getElementById("weatherDetails").childElementCount;
+            var childCount = (document.getElementById("weatherDetails")as HTMLElement).childElementCount;
             for (var i = 0; i < length; i++) {
-                document.getElementById("val1").innerHTML = "";
-                document.getElementById("val2").innerHTML = "";
-                document.getElementById("val3").innerHTML = "";
-                document.getElementById("val4").innerHTML = "";
+                (document.getElementById("val1")as HTMLElement).innerHTML = "";
+                (document.getElementById("val2")as HTMLElement).innerHTML = "";
+                (document.getElementById("val3")as HTMLElement).innerHTML = "";
+                (document.getElementById("val4") as HTMLElement).innerHTML = "";
                 this.time = data['daily']['data'][i]['time'];
                 this.temperature = data['daily']['data'][i]['temperatureLow'];
                 this.pressure = data['daily']['data'][i]['pressure'];
@@ -66,11 +66,11 @@ class WeatherForecast extends CurrentLocation
                 displayData.setAttribute("id", "det" + i);
                 if (childCount > 0) {
                     let node = document.getElementById("det" + i);
-                    node.parentNode.replaceChild(displayData, node);
+                    ((node as HTMLElement).parentNode as HTMLElement).replaceChild(displayData, (node as HTMLElement));
 
                 }
                  else {
-                    document.getElementById("weatherDetails").appendChild(displayData);
+                    (document.getElementById("weatherDetails")as HTMLElement).appendChild(displayData);
                     childCount = childCount - 1;
 
                 }
@@ -80,7 +80,7 @@ class WeatherForecast extends CurrentLocation
     changeTemperature()
     {
         
-             if (document.getElementById("weatherDetails"))
+             if ((document.getElementById("weatherDetails")as HTMLElement).childElementCount)
             {
                 this.weatherForecast();
         
@@ -91,4 +91,4 @@ class WeatherForecast extends CurrentLocation
             }
     }
 }
-// let wf = new WeatherForecast();
+let wf = new WeatherForecast();
