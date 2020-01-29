@@ -1,0 +1,32 @@
+{
+  "name": "weather",
+  "version": "1.0.0",
+  "description": "",
+  "main": "currentlocation.js",
+  "dependencies": {},
+  "devDependencies": {
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
+  },
+  "scripts": {
+    
+    "test": "echo \"Error: no test specified\" && exit 1"
+     "start": "webpack-dev-server --mode development"
+   
+   
+  },
+  
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mguptaex2/weather.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mguptaex2/weather/issues"
+  },
+  "homepage": "https://github.com/mguptaex2/weather#readme"
+}

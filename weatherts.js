@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -47,6 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+exports.__esModule = true;
 var WeatherDisplay = /** @class */ (function () {
     function WeatherDisplay() {
     }
@@ -70,9 +72,10 @@ var WeatherDisplay = /** @class */ (function () {
         document.getElementById("val2").textContent = "location :-" + this.city + "," + this.country;
         document.getElementById("val3").innerHTML = this.temp + " <br>";
         document.getElementById("val4").innerHTML = "description " + this.description;
-        if (document.getElementById("weatherDetails")) {
-            document.getElementById("weatherDetails").remove();
-        }
+        // if (document.getElementById("weatherDetails"))
+        //  {
+        //        document.getElementById("weatherDetails").remove();
+        //  }
     };
     return WeatherDisplay;
 }());
@@ -114,111 +117,118 @@ var GetApi = /** @class */ (function (_super) {
     };
     return GetApi;
 }(WeatherDisplay));
-var CurrentLocation = /** @class */ (function (_super) {
-    __extends(CurrentLocation, _super);
-    function CurrentLocation() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    CurrentLocation.prototype.currentLocationOfUser = function () {
-        var _this = this;
-        //it tells the current location of the user.
-        navigator.geolocation.getCurrentPosition(function (position) {
-            _this.longitude = position.coords.longitude;
-            _this.latitude = position.coords.latitude;
-            _this.getCurrentWeather();
-        });
-    };
-    CurrentLocation.prototype.getCurrentWeather = function () {
-        var _this = this;
-        //It displays the weather of cuurent location.
-        var URL = 'https://api.openweathermap.org/data/2.5/weather?lat=' + this.latitude + '&lon=' + this.longitude + '&appid=058071b3c7be6c1ba2185d48585c50ad';
-        this.getApiCall(URL).then(function (data) {
-            _this.city = data['name'];
-            _this.country = data['sys']['country'];
-            _this.temperature = data['main']['temp'];
-            _this.description = data['weather'][0]['description'];
-            _this.temperature = _this.temperature - 273.15;
-            (document.getElementById("locs").value) = _this.city;
-            _this.displayWeatherOnHtml();
-        });
-    };
-    return CurrentLocation;
-}(GetApi));
-var WeatherForecast = /** @class */ (function (_super) {
-    __extends(WeatherForecast, _super);
-    function WeatherForecast() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    WeatherForecast.prototype.weatherForecastOfCurrentLocation = function () {
-        var _this = this;
-        navigator.geolocation.getCurrentPosition(function (position) {
-            _this.longitude = position.coords.longitude;
-            _this.latitude = position.coords.latitude;
-            _this.bindDataFromApiForWeatherForecast();
-        });
-    };
-    WeatherForecast.prototype.weatherForecast = function () {
-        var _this = this;
-        // It fetches the current location or the location enetred by user and calls weatherFore to display the weather forecast.
-        if ((document.getElementById("locs").value) === "") {
-            this.weatherForecastOfCurrentLocation();
-        }
-        else {
-            var location_1 = (document.getElementById("locs").value);
-            var URL_1 = 'http://api.weatherstack.com/current?access_key=e3a07aed460ae8a3dddf8c3b9182c739&query=' + location_1;
-            this.getApiCall(URL_1).then(function (data) {
-                _this.latitude = data['location']['lat'];
-                _this.longitude = data['location']['lon'];
-                _this.bindDataFromApiForWeatherForecast();
-            });
-        }
-    };
-    WeatherForecast.prototype.convertDateToFormat = function () {
-        var date = new Date(this.time * 1000);
-        var date1 = date.getDate();
-        var year = date.getFullYear();
-        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        var month = months[date.getMonth()];
-        var formattedDate = date1 + '-' + month + '-' + year;
-        return formattedDate;
-    };
-    WeatherForecast.prototype.bindDataFromApiForWeatherForecast = function () {
-        var _this = this;
-        var URL = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/9799c5aedd90c08edac7f8af73c81ba9/' + this.latitude + ',' + this.longitude;
-        this.getApiCall(URL).then(function (data) {
-            var hourdata = '';
-            var length = Object.keys(data['daily']['data']).length;
-            var childCount = document.getElementById("weatherDetails").childElementCount;
-            for (var i = 0; i < length; i++) {
-                _this.time = data['daily']['data'][i]['time'];
-                _this.temperature = data['daily']['data'][i]['temperatureLow'];
-                _this.pressure = data['daily']['data'][i]['pressure'];
-                _this.description = data['daily']['data'][i]['summary'];
-                var formattedDate = _this.convertDateToFormat();
-                _this.temperatureConvert();
-                hourdata = " " + formattedDate + "<br><b>Temp </b>:- " + _this.temp + "<br><b>Pressure is</b>:- " + _this.pressure + "<br><b>Summary is :-</b>" + _this.description + " <br>";
-                var displayData = document.createElement("div");
-                displayData.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
-                displayData.classList.add("Details");
-                displayData.setAttribute("id", "det" + i);
-                if (childCount > 0) {
-                    var node = document.getElementById("det" + i);
-                    node.parentNode.replaceChild(displayData, node);
-                }
-                else {
-                    document.getElementById("weatherDetails").appendChild(displayData);
-                    childCount = childCount - 1;
-                }
-            }
-        });
-    };
-    WeatherForecast.prototype.changeTemperature = function () {
-        if (document.getElementById("weatherDetails")) {
-            this.weatherForecast();
-        }
-        else {
-            this.bindDataFromApi();
-        }
-    };
-    return WeatherForecast;
-}(CurrentLocation));
+exports.GetApi = GetApi;
+var t = new GetApi();
+// class CurrentLocation extends GetApi {
+//     currentLocationOfUser() 
+//     {
+//             //it tells the current location of the user.
+//             navigator.geolocation.getCurrentPosition((position) =>
+//             {
+//                  this.longitude = position.coords.longitude;
+//                  this.latitude = position.coords.latitude;
+//                  this.getCurrentWeather();
+//             });
+//     }
+//     getCurrentWeather()
+//     {
+//         //It displays the weather of cuurent location.
+//         let URL = 'https://api.openweathermap.org/data/2.5/weather?lat=' + this.latitude + '&lon=' + this.longitude + '&appid=058071b3c7be6c1ba2185d48585c50ad'
+//         this.getApiCall(URL).then(data => 
+//             {
+//                 this.city = data['name'];
+//                 this.country = data['sys']['country'];
+//                 this.temperature = data['main']['temp'];
+//                 this.description = data['weather'][0]['description'];
+//                 this.temperature = this.temperature - 273.15;
+//                 ((document.getElementById("locs") as HTMLInputElement).value) = this.city;
+//                 this.displayWeatherOnHtml();
+//             });
+//     }
+// }
+// class WeatherForecast extends GetApi
+//  {
+//         time: any;
+//         pressure: any;
+//     weatherForecastOfCurrentLocation() 
+//     {
+//         navigator.geolocation.getCurrentPosition((position) =>
+//          {
+//                 this.longitude = position.coords.longitude;
+//                 this.latitude = position.coords.latitude;
+//                 this.bindDataFromApiForWeatherForecast();
+//          });
+//     }
+//     weatherForecast() 
+//     {
+//         // It fetches the current location or the location enetred by user and calls weatherFore to display the weather forecast.
+//         if (((document.getElementById("locs") as HTMLInputElement).value) === "") 
+//         {
+//             this.weatherForecastOfCurrentLocation();
+//         }
+//         else
+//          {
+//             let location = ((document.getElementById("locs") as HTMLInputElement).value);
+//             let URL = 'http://api.weatherstack.com/current?access_key=e3a07aed460ae8a3dddf8c3b9182c739&query=' + location;
+//             this.getApiCall(URL).then(data => {
+//                 this.latitude = data['location']['lat'];
+//                 this.longitude = data['location']['lon'];
+//                 this.bindDataFromApiForWeatherForecast();
+//             });
+//         }
+//     }
+//     convertDateToFormat() {
+//         var date = new Date(this.time * 1000);
+//         var date1 = date.getDate();
+//         var year = date.getFullYear();
+//         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+//         var month = months[date.getMonth()];
+//         var formattedDate = date1 + '-' + month + '-' + year;
+//         return formattedDate;
+//     }
+//     bindDataFromApiForWeatherForecast() {
+//         let URL = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/9799c5aedd90c08edac7f8af73c81ba9/' + this.latitude + ',' + this.longitude;
+//         this.getApiCall(URL).then(data => {
+//             var hourdata = '';
+//             var length = Object.keys(data['daily']['data']).length;
+//             var childCount = document.getElementById("weatherDetails").childElementCount;
+//             for (var i = 0; i < length; i++) {
+//                 document.getElementById("val1").innerHTML = "";
+//                 document.getElementById("val2").innerHTML = "";
+//                 document.getElementById("val3").innerHTML = "";
+//                 document.getElementById("val4").innerHTML = "";
+//                 this.time = data['daily']['data'][i]['time'];
+//                 this.temperature = data['daily']['data'][i]['temperatureLow'];
+//                 this.pressure = data['daily']['data'][i]['pressure'];
+//                 this.description = data['daily']['data'][i]['summary'];
+//                 var formattedDate = this.convertDateToFormat();
+//                 this.temperatureConvert();
+//                 hourdata = " " + formattedDate + "<br><b>Temp </b>:- " + this.temp + "<br><b>Pressure is</b>:- " + this.pressure + "<br><b>Summary is :-</b>" + this.description + " <br>";
+//                 var displayData = document.createElement("div");
+//                 displayData.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
+//                 displayData.classList.add("Details");
+//                 displayData.setAttribute("id", "det" + i);
+//                 if (childCount > 0) {
+//                     let node = document.getElementById("det" + i);
+//                     node.parentNode.replaceChild(displayData, node);
+//                 }
+//                  else {
+//                     document.getElementById("weatherDetails").appendChild(displayData);
+//                     childCount = childCount - 1;
+//                 }
+//             }
+//         });
+//     }
+//     changeTemperature()
+//     {
+//              if (document.getElementById("weatherDetails"))
+//             {
+//                 this.weatherForecast();
+//             }
+//             else
+//             {
+//                 this.bindDataFromApi();
+//             }
+//     }
+// }
+// let wf = new WeatherForecast();
