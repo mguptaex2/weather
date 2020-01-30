@@ -31,4 +31,7 @@ export class CurrentLocation extends GetApi  {
 
     }
 }
+(<any>window). CurrentLocation =  CurrentLocation;
 // let cl = new CurrentLocation();
+
+

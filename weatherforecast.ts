@@ -91,4 +91,5 @@ export default class WeatherForecast extends CurrentLocation
             }
     }
 }
-let wf = new WeatherForecast();
+(<any>window).WeatherForecast  =  WeatherForecast ;
+// let wf = new WeatherForecast();

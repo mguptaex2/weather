@@ -6,11 +6,14 @@ module.exports = {
     output: {
         filename: 'bundle.js',
         path: __dirname,
-        library: 'WeatherForecast',
-        libraryTarget:'var',
-        libraryExport:'default'
+        // library: 'WeatherForecast',
+        // libraryTarget:'var',
+        // libraryExport:'default'
+        
     },
     devtool: 'inline-source-map',
+   
+   
     module: {
         rules: [
             {

@@ -74,4 +74,5 @@ export class GetApi extends WeatherDisplay
     }
     
 }
-let t = new GetApi();
+// let t = new GetApi();
+(<any>window). GetApi =  GetApi;
