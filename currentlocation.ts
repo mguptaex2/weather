@@ -1,37 +1,40 @@
-import {GetApi} from "./weatherts"; 
+import { WeatherDisplay} from "./weatherts"; 
+import { GetApi } from "./getapi";
 
-export class CurrentLocation extends GetApi  {
-
+export class CurrentLocation   {
     currentLocationOfUser() 
     {
             //it tells the current location of the user.
-            navigator.geolocation.getCurrentPosition((position) =>
+            if(navigator.geolocation)
+             {
+                navigator.geolocation.getCurrentPosition(this.getCurrentWeather); 
+            }
+                else
             {
-                 this.longitude = position.coords.longitude;
-                 this.latitude = position.coords.latitude;
-                 this.getCurrentWeather();
-
-            });
+            alert("Not supporting browser");
+            }    
     }
 
-    getCurrentWeather()
+    getCurrentWeather(position:any)
     {
         //It displays the weather of cuurent location.
-        let URL = 'https://api.openweathermap.org/data/2.5/weather?lat=' + this.latitude + '&lon=' + this.longitude + '&appid=058071b3c7be6c1ba2185d48585c50ad'
-        this.getApiCall(URL).then(data => 
+        let weather = new WeatherDisplay();
+        let api = new GetApi();
+        let URL = 'https://api.openweathermap.org/data/2.5/weather?lat=' + position.coords.latitude + '&lon=' + position.coords.longitude + '&appid=058071b3c7be6c1ba2185d48585c50ad'
+     
+        api.getApiCall(URL).then(data => 
             {
-                this.city = data['name'];
-                this.country = data['sys']['country'];
-                this.temperature = data['main']['temp'];
-                this.description = data['weather'][0]['description'];
-                this.temperature = this.temperature - 273.15;
-                ((document.getElementById("locs") as HTMLInputElement).value) = this.city;
-                this.displayWeatherOnHtml();
+                weather.city = data['name'];
+                weather.country = data['sys']['country'];
+                weather.temperature = data['main']['temp'];
+                weather.description = data['weather'][0]['description'];
+                weather.temperature = weather.temperature - 273.15;
+                ((document.getElementById("locs") as HTMLInputElement).value) = weather.city;
+                weather.displayWeatherOnHtml();
             });
 
     }
 }
 (<any>window). CurrentLocation =  CurrentLocation;
-// let cl = new CurrentLocation();
 
 

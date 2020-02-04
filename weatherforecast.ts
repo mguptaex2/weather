@@ -1,16 +1,25 @@
 import {CurrentLocation} from "./currentlocation"; 
-export default class WeatherForecast extends CurrentLocation
+import {  WeatherDisplay } from "./weatherts";
+import { GetApi } from "./getapi";
+export  class WeatherForecast extends GetApi
  {
         time: any;
         pressure: any;
+        weather: any
+        constructor()
+        {
+            super();
+            this.weather = new WeatherDisplay();
+            let currentloc = new CurrentLocation();
+        }
 
     weatherForecastOfCurrentLocation() 
     {
         navigator.geolocation.getCurrentPosition((position) =>
          {
-                this.longitude = position.coords.longitude;
-                this.latitude = position.coords.latitude;
-                this.bindDataFromApiForWeatherForecast();
+                this.weather.longitude = position.coords.longitude;
+                this.weather.latitude = position.coords.latitude;
+                this.bindDataFromApiForWeatherForecast(position);
             
          });
     }
@@ -19,16 +28,17 @@ export default class WeatherForecast extends CurrentLocation
         // It fetches the current location or the location enetred by user and calls weatherFore to display the weather forecast.
         if (((document.getElementById("locs") as HTMLInputElement).value) === "") 
         {
-            this.weatherForecastOfCurrentLocation();
+           this.weatherForecastOfCurrentLocation();
         }
         else
          {
             let location = ((document.getElementById("locs") as HTMLInputElement).value);
             let URL = 'http://api.weatherstack.com/current?access_key=e3a07aed460ae8a3dddf8c3b9182c739&query=' + location;
             this.getApiCall(URL).then(data => {
-                this.latitude = data['location']['lat'];
-                this.longitude = data['location']['lon'];
-                this.bindDataFromApiForWeatherForecast();
+                this.weather.latitude = data['location']['lat'];
+                this.weather.longitude = data['location']['lon'];
+                this.bindDataFromApiForWeatherForecast(this.weather);
+                return data;
             });
 
         }
@@ -42,8 +52,8 @@ export default class WeatherForecast extends CurrentLocation
         var formattedDate = date1 + '-' + month + '-' + year;
         return formattedDate;
     }
-    bindDataFromApiForWeatherForecast() {
-        let URL = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/9799c5aedd90c08edac7f8af73c81ba9/' + this.latitude + ',' + this.longitude;
+    bindDataFromApiForWeatherForecast(position:any) {
+        let URL = 'https://cors-anywhere.herokuapp.com/https://api.darksky.net/forecast/9799c5aedd90c08edac7f8af73c81ba9/' + this.weather.latitude + ',' + this.weather.longitude;
         this.getApiCall(URL).then(data => {
             var hourdata = '';
             var length = Object.keys(data['daily']['data']).length;
@@ -54,12 +64,12 @@ export default class WeatherForecast extends CurrentLocation
                 (document.getElementById("val3")as HTMLElement).innerHTML = "";
                 (document.getElementById("val4") as HTMLElement).innerHTML = "";
                 this.time = data['daily']['data'][i]['time'];
-                this.temperature = data['daily']['data'][i]['temperatureLow'];
+                this.weather.temperature = data['daily']['data'][i]['temperatureLow'];
                 this.pressure = data['daily']['data'][i]['pressure'];
-                this.description = data['daily']['data'][i]['summary'];
+                this.weather.description = data['daily']['data'][i]['summary'];
                 var formattedDate = this.convertDateToFormat();
-                this.temperatureConvert();
-                hourdata = " " + formattedDate + "<br><b>Temp </b>:- " + this.temp + "<br><b>Pressure is</b>:- " + this.pressure + "<br><b>Summary is :-</b>" + this.description + " <br>";
+                this.weather.temperatureConvert();
+                hourdata = " " + formattedDate + "<br><b>Temp </b>:- " + this.weather.temp + "<br><b>Pressure is</b>:- " + this.pressure + "<br><b>Summary is :-</b>" + this.weather.description + " <br>";
                 var displayData = document.createElement("div");
                 displayData.innerHTML = '<b><u>Date is:</b></u>' + '<br>' + hourdata;
                 displayData.classList.add("Details");
@@ -77,19 +87,6 @@ export default class WeatherForecast extends CurrentLocation
             }
         });
     }
-    changeTemperature()
-    {
-        
-             if ((document.getElementById("weatherDetails")as HTMLElement).childElementCount)
-            {
-                this.weatherForecast();
-        
-            }
-            else
-            {
-                this.bindDataFromApi();
-            }
-    }
+    
 }
 (<any>window).WeatherForecast  =  WeatherForecast ;
-// let wf = new WeatherForecast();
