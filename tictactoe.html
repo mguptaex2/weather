@@ -10,27 +10,28 @@
   
 
 </head>
-<body>
+<body onload="a = new Tictactoe1()">
     <h1>TIC TAC TOE</h1>
     <div>  
           <table>
 
         <tr>
-            <td class="block" ><button id = "0" onclick="a.start(0)" style = "width: 100px;height: 100px" ></button></td>
-            <td class="block" ><button id = "1" onclick="a.start(1)" style = "width: 100px;height: 100px" ></button></td>
-            <td class="block"><button id = "2" onclick="a.start(2)"></button></td>
+            <td class="block" ><button id = "0" onclick="a.start(id)" style = "width: 100px;height: 100px" ></button></td>
+            <td class="block" ><button id = "1" onclick="a.start(id)" style = "width: 100px;height: 100px" ></button></td>
+            <td class="block"><button id = "2" onclick="a.start(id)" style = "width: 100px;height: 100px"></button></td>
          </tr>
         <tr>
-            <td class="block"><button id = "3" onclick="new Tictactoe().start(3)"></button></td>
-            <td class="block"><button id = "4" onclick="new Tictactoe().start(4)"></button></td>
-            <td class="block"><button id = "5" onclick="new Tictactoe().start(5)"></button></td>
+            <td class="block"><button id = "3" onclick="a.start(id)" style = "width: 100px;height: 100px"></button></td>
+            <td class="block"><button id = "4" onclick="a.start(id)" style = "width: 100px;height: 100px"></button></td>
+            <td class="block"><button id = "5" onclick="a.start(id)" style = "width: 100px;height: 100px"></button></td>
         </tr>
         <tr>
-            <td class="block"><button id = "6" onclick="new Tictactoe().start(6)"></button></td>
-            <td class="block" ><button id = "7" onclick="new Tictactoe().start(7)"></button></td>
-            <td class="block"><button id = "8" onclick="new Tictactoe().start(8)"></button></td>
+            <td class="block"><button id = "6" onclick="a.start(id)" style = "width: 100px;height: 100px"></button></td>
+            <td class="block" ><button id = "7" onclick="a.start(id)" style = "width: 100px;height: 100px"></button></td>
+            <td class="block"><button id = "8" onclick="a.start(id)" style = "width: 100px;height: 100px"></button></td>
         </tr>
     </table>
+    <button onclick="a.replay()">Replay</button>
     </div>
     <script src = "tictoe.js"></script>
    
