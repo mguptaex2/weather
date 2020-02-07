@@ -4,41 +4,72 @@ var Tictactoe1 = /** @class */ (function () {
         this.human = 0;
         this.computer = 1;
         this.turn = 0;
-        this.cells = document.querySelectorAll('.block');
+        this.totalturn = 0;
+        //  cells = document.querySelectorAll('.block');
         this.board = Array.from(Array(9).keys());
     }
     Tictactoe1.prototype.start = function (id) {
         //    console.log(typeof(this.board));
         this.turn === this.human;
-        if (this.turn === this.human) {
-            this.blockSelected(id, this.human);
-            this.turn = this.computer;
-        }
-        else {
-            this.blockSelected(id, this.computer);
-            this.turn = this.human;
-        }
+        // if(this.turn === this.human)
+        // {
+        this.blockSelected(id, this.human);
+        this.turn = this.computer;
+        // }
+        // else
+        // { 
+        // this.blockSelected(id, this.computer);
+        // // this.computerPlayer();
+        // this.turn = this.human;
+        // }
+        this.totalturn++;
+        // (document.getElementById(id)as HTMLElement).setAttribute("disabled","true");
+        // let win = this.winner(player);
+        // if(win === 0||win === 1){
+        //     alert("winner" );
+        // }
     };
     Tictactoe1.prototype.blockSelected = function (id, player) {
         var num = +id;
         this.board[num] = player;
-        // console.log(typeof(num));
-        // console.log(this.board[0]);
-        if (player === 0) {
-            document.getElementById(id).innerText = '0';
+        // if(player === 0)
+        // {
+        document.getElementById(id).innerText = '0';
+        // (document.getElementById(id)as HTMLElement).setAttribute("disabled","true");
+        // }
+        // (document.getElementById(id)as HTMLElement).innerHTML="X";
+        // else
+        // {
+        this.computerPlayer();
+        // }
+        // }
+        var win = this.winner(0);
+        if (win === 0) {
+            alert("winner is human");
         }
-        else {
-            document.getElementById(id).innerText = 'x';
-        }
-        var win = this.winner(player);
-        if (win === 0 || win === 1) {
-            alert("winner is " + win);
-            // this.replay();
-            // console.log(this.board);
-        }
-        this.isFull();
     };
-    Tictactoe1.prototype.isFull = function () {
+    Tictactoe1.prototype.computerPlayer = function () {
+        while (true) {
+            var random = Math.floor(Math.random() * 8) + 1;
+            var randomNumber = random.toString();
+            // console.log(randomNumber);
+            var emptySlots = document.getElementById(randomNumber).innerHTML;
+            // console.log(emptySlots);
+            if (emptySlots === "") {
+                var num = +randomNumber;
+                this.board[num] = 1;
+                document.getElementById(randomNumber).innerHTML = "X";
+                //  (document.getElementById(randomNumber)as HTMLElement).setAttribute("disabled","true");   
+                this.turn = this.human;
+                this.totalturn++;
+                var win = this.winner(1);
+                if (win === 1) {
+                    alert("winner is computer");
+                }
+                return true;
+            }
+        }
+        // return false;
     };
     Tictactoe1.prototype.winner = function (player) {
         var gameWon = null;
@@ -72,6 +103,10 @@ var Tictactoe1 = /** @class */ (function () {
                 gameWon = player;
             }
         }
+        if (this.totalturn === 8) {
+            alert("game draw");
+            this.replay();
+        }
         return gameWon;
     };
     Tictactoe1.prototype.replay = function () {
@@ -84,4 +119,3 @@ var Tictactoe1 = /** @class */ (function () {
     };
     return Tictactoe1;
 }());
-// a.start();

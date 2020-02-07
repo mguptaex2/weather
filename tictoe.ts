@@ -6,8 +6,8 @@ class Tictactoe1
      human = 0;
      computer = 1;
      turn:number = 0;
-    
-     cells = document.querySelectorAll('.block');
+    totalturn :number =0;
+    //  cells = document.querySelectorAll('.block');
      board = Array.from(Array(9).keys());
 
     start(id:string)
@@ -15,58 +15,68 @@ class Tictactoe1
 //    console.log(typeof(this.board));
     this.turn === this.human;
     
-    if(this.turn === this.human)
-    {
+    // if(this.turn === this.human)
+    // {
     this.blockSelected(id,this.human);
     this.turn = this.computer;
-    }
-    else
-    { 
-    this.blockSelected(id, this.computer);
-    this.turn = this.human;
-    }
-    }
+    // }
+    // else
+    // { 
+    // this.blockSelected(id, this.computer);
+    // // this.computerPlayer();
+    // this.turn = this.human;
+    // }
+    this.totalturn++;
+     }
 
 blockSelected(id:string, player:number)
 {
-    var num:number =+id;
- 
-    this.board[num] = player;
-    // console.log(typeof(num));
-    // console.log(this.board[0]);
-    if(player === 0)
-    {
-   (document.getElementById(id)as HTMLElement).innerText = '0';
-    }
-    else
-    {
-        (document.getElementById(id)as HTMLElement).innerText = 'x';
-    }
-   let win = this.winner(player);
-   
-   if(win === 0||win === 1){
-   alert("winner is " +win);
-    // this.replay();
-    // console.log(this.board);
-    }
-    this.isFull();
-    
-        
-    
-   
+            var num:number =+id;
+            this.board[num] = player;
+            // if(player === 0)
+            // {
+            (document.getElementById(id)as HTMLElement).innerText = '0';
+            // (document.getElementById(id)as HTMLElement).setAttribute("disabled","true");
+            // }
+                 // (document.getElementById(id)as HTMLElement).innerHTML="X";
+                // else
+                // {
+                this.computerPlayer();
+                // }
+            // }
+
+        let win = this.winner(0);
+        if(win === 0){
+            alert("winner is human" );
+        }
 }
-isFull()
+
+computerPlayer()
 {
-    for(var i = 0;i<9;i++)
+    while(true)
     {
-        var str:string = i.toString();
+    let random = Math.floor(Math.random()*8)+1;
+    let randomNumber = random.toString(); 
+    // console.log(randomNumber);
+        let emptySlots= (document.getElementById(randomNumber)as HTMLElement).innerHTML;
+        // console.log(emptySlots);
+        if(emptySlots==="")
+        {
+            var num:number =+randomNumber;
+            this.board[num] = 1;
+         (document.getElementById(randomNumber)as HTMLElement).innerHTML="X";
+        //  (document.getElementById(randomNumber)as HTMLElement).setAttribute("disabled","true");   
+       this.turn = this.human;
+        this.totalturn++;
+        let win = this.winner(1);
+        if(win === 1){
+            alert("winner is computer" );
+        } 
+        return true;
         
-       if( (document.getElementById(str)as HTMLElement).innerHTML = '0'||document.getElementById(str)as HTMLElement).innerHTML = 'x')
-       {
-           
-       }
-        
+        }
     }
+        // return false;
 }
 winner(player:number)
 {   
@@ -120,7 +130,11 @@ winner(player:number)
            
         }
         
-       
+       if(this.totalturn === 8)
+       {
+           alert("game draw");
+           this.replay();
+       }
         return gameWon;
     }
 
@@ -137,5 +151,3 @@ winner(player:number)
     }
 
 }
-
-// a.start();
