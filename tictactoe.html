@@ -10,10 +10,10 @@
   
 
 </head>
-<body onload="a = new Tictactoe1()">
+<body onload="a = new WhoseTurn()">
     <h1>TIC TAC TOE</h1>
     <div>  
-          <table>
+          <table align ="center">
 
         <tr>
             <td class="block" ><button id = "0" onclick="a.start(id)" style = "width: 100px;height: 100px" ></button></td>
@@ -31,8 +31,10 @@
             <td class="block"><button id = "8" onclick="a.start(id)" style = "width: 100px;height: 100px"></button></td>
         </tr>
     </table>
-    <button onclick="a.replay()">Replay</button>
-    </div>
+</div>
+<div class = "replay">
+    <button  onclick="new Replay().replay()"style = "width: 100px;height: 100px">Replay</button>
+</div>
     <script src = "tictoe.js"></script>
    
 

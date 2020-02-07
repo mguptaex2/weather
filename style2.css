@@ -13,6 +13,7 @@
 }
 
 .block {
+ 
   width:85px;
   height:85px;
   border: 5px solid #0026ff;
@@ -28,4 +29,12 @@
 .block:hover {
   background: #C2DBFC;
   text-align: center;
+}
+.replay
+{
+  width:85px;
+  height:85px;
+  background: #FFFFFF;
+  font-size: 46pt;
+ 
 }
