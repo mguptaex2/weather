@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rock Paper Scissors Game</title>
+    <link rel="stylesheet" href="rps.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+    <script type ="text/javascript" src = "rockpaperscissorgame.js"></script>
+    <div class="Top">
+        <h1>Rock Paper Scissors Game</h1>
+       </div>
+            <button id="b1" style="margin-top:20px; float: right; margin-bottom: 20px;margin-right: 50px;" onclick="new RockPaperScissorGame().reset();">Restart Game</button><br><br>
+    
+        <div id="score" class ="col-md-12 col-xs-12" style="width: 100%;display: flex;">
+            <div class ="col-md-6 col-xs-6 player" style="flex-wrap:flex">Player: 0</div>
+            <div class ="col-md-6 col-xs-6 computer" style="flex-wrap:flex">Computer: 0</div>
+        </div><br>
+          <div class ="col-md-12 col-xs-12"style ="display:flex">
+            <div class ="col-md-4 col-xs-4"style ="flex-wrap:flex">
+                <img src="stone.png" onclick="new RockPaperScissorGame().pick(0);">
+            </div>
+            <div class ="col-md-4 col-xs-4"style ="flex-wrap:flex">
+                <img src="paper.png"onclick="new RockPaperScissorGame().pick(1);">
+            </div>
+            
+            <div class ="col-md-4 col-xs-4"style ="flex-wrap:flex">
+                <img src="scissor.png"onclick="new RockPaperScissorGame().pick(2);">
+            </div>
+        </div>
+        <div class = "result">
+        <p id = "result1"></p>    
+        </div>
+    
+    
+    
+
+   
+
+</body>
+
+
+</html>
