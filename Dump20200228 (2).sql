@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS `address`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `address` (
   `address_id` int NOT NULL AUTO_INCREMENT,
-  `user_id_address` int NOT NULL,
-  `permanent_address_line1` text,
+  `user_id` int NOT NULL,
+  `permanent_address_line1` text NOT NULL,
   `permanent_address_line2` text,
   `permanent_city_id` int NOT NULL,
   `permanent_pincode` varchar(45) NOT NULL,
@@ -37,10 +37,10 @@ CREATE TABLE `address` (
   PRIMARY KEY (`address_id`),
   KEY `city_id_idx` (`permanent_city_id`),
   KEY `current_city_id_idx` (`current_city_id`),
-  KEY `user_id_idx` (`user_id_address`),
+  KEY `user_id_idx` (`user_id`),
   CONSTRAINT `city_id` FOREIGN KEY (`permanent_city_id`) REFERENCES `city` (`city_id`),
   CONSTRAINT `current_city_id` FOREIGN KEY (`current_city_id`) REFERENCES `city` (`city_id`),
-  CONSTRAINT `user_id_address` FOREIGN KEY (`user_id_address`) REFERENCES `user` (`user_id`)
+  CONSTRAINT `user_id_address` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -95,13 +95,14 @@ DROP TABLE IF EXISTS `bank_details`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bank_details` (
   `bank_details_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
+  `user_id` int NOT NULL,
   `bank_name` varchar(45) NOT NULL,
   `branch` varchar(45) DEFAULT NULL,
   `account_number` varchar(45) NOT NULL,
   `IFSC` varchar(45) NOT NULL,
   `permanent_account_number` varchar(45) NOT NULL,
   `PAN_image` blob,
+  `aadhar_number` varchar(45) NOT NULL,
   PRIMARY KEY (`bank_details_id`),
   KEY `user_id_bank_idx` (`user_id`),
   CONSTRAINT `user_id_bank` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
@@ -114,7 +115,7 @@ CREATE TABLE `bank_details` (
 
 LOCK TABLES `bank_details` WRITE;
 /*!40000 ALTER TABLE `bank_details` DISABLE KEYS */;
-INSERT INTO `bank_details` VALUES (1,1,'SBI','Faridabad','1324894399898','UTI34772','CXO43783648',NULL),(2,2,'axis','Panipat','91002464762863','UTI34725','CXO43325224',NULL),(3,3,'SBI','Faridabad','6434673757747','UTI34453','CXO43785646',NULL),(4,4,'CITI','Faridabad','1324894636663','UTI35555','CXO45465674',NULL),(5,5,'SBI','Faridabad','13242352525435','UTI345436','CXO654747447',NULL);
+INSERT INTO `bank_details` VALUES (1,1,'SBI','Faridabad','1324894399898','UTI34772','CXO43783648',NULL,'2343 4545 4352'),(2,2,'axis','Panipat','91002464762863','UTI34725','CXO43325224',NULL,'4546 4453 3546'),(3,3,'SBI','Faridabad','6434673757747','UTI34453','CXO43785646',NULL,'7785 3452 4543'),(4,4,'CITI','Faridabad','1324894636663','UTI35555','CXO45465674',NULL,'2435 6765 5644'),(5,5,'SBI','Faridabad','13242352525435','UTI345436','CXO654747447',NULL,'6756 5464 6545');
 /*!40000 ALTER TABLE `bank_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -203,8 +204,8 @@ DROP TABLE IF EXISTS `designation`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `designation` (
   `designation_id` int NOT NULL AUTO_INCREMENT,
-  `designation` varchar(45) DEFAULT NULL,
-  `department_id` int DEFAULT NULL,
+  `designation` varchar(45) NOT NULL,
+  `department_id` int NOT NULL,
   PRIMARY KEY (`designation_id`),
   KEY `department_id_idx` (`department_id`),
   CONSTRAINT `department_id_designation` FOREIGN KEY (`department_id`) REFERENCES `department` (`department_id`)
@@ -230,14 +231,16 @@ DROP TABLE IF EXISTS `devices`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `devices` (
   `device_id` int NOT NULL AUTO_INCREMENT,
-  `device_status` enum('ALLOCATED','FREE') NOT NULL,
+  `status_id` int NOT NULL,
   `device_name` varchar(45) NOT NULL,
   `specification_id` int NOT NULL,
   `date_of_purchase` date DEFAULT NULL,
   `price` varchar(11) DEFAULT NULL,
   PRIMARY KEY (`device_id`),
   KEY `SPECIFICATIONID_idx` (`specification_id`),
-  CONSTRAINT `SPECIFICATIONID` FOREIGN KEY (`specification_id`) REFERENCES `specification` (`specification_id`)
+  KEY `status_id_devices_idx` (`status_id`),
+  CONSTRAINT `SPECIFICATIONID` FOREIGN KEY (`specification_id`) REFERENCES `specification` (`specification_id`),
+  CONSTRAINT `status_id_dev` FOREIGN KEY (`status_id`) REFERENCES `status` (`status_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -247,7 +250,7 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (1,'ALLOCATED','IPHONE5',3,'2019-03-02','RS 20000'),(2,'ALLOCATED','REDMI8PRO',1,'2018-03-02','RS 12000'),(3,'FREE','DELL',4,'2019-03-02','RS 30000'),(4,'FREE','LENOVOTHINKPAD',5,'2017-03-02','RS 50000'),(5,'ALLOCATED','BOAT',7,'2019-03-02','RS 10000'),(6,'ALLOCATED','REDMI',1,'2019-03-02','RS 20000'),(7,'ALLOCATED','HP',6,'2019-03-02','RS 35000');
+INSERT INTO `devices` VALUES (1,4,'IPHONE5',3,'2019-03-02','RS 20000'),(2,4,'REDMI8PRO',1,'2018-03-02','RS 12000'),(3,5,'DELL',4,'2019-03-02','RS 30000'),(4,5,'LENOVOTHINKPAD',5,'2017-03-02','RS 50000'),(5,4,'BOAT',7,'2019-03-02','RS 10000'),(6,4,'REDMI',1,'2019-03-02','RS 20000'),(7,4,'HP',6,'2019-03-02','RS 35000');
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -315,6 +318,30 @@ INSERT INTO `faulty_device` VALUES (1,1,2,'SOFTWARE PROBLEM',NULL,'2020-02-23 05
 UNLOCK TABLES;
 
 --
+-- Table structure for table `gender`
+--
+
+DROP TABLE IF EXISTS `gender`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `gender` (
+  `gender_id` int NOT NULL AUTO_INCREMENT,
+  `gender` varchar(45) NOT NULL,
+  PRIMARY KEY (`gender_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `gender`
+--
+
+LOCK TABLES `gender` WRITE;
+/*!40000 ALTER TABLE `gender` DISABLE KEYS */;
+INSERT INTO `gender` VALUES (1,'male'),(2,'female'),(3,'other');
+/*!40000 ALTER TABLE `gender` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `marital_status`
 --
 
@@ -349,11 +376,13 @@ CREATE TABLE `new_device_request` (
   `new_request_id` int NOT NULL,
   `user_id` int NOT NULL,
   `description` text NOT NULL,
-  `new_request_status` enum('ACCEPTED','REJECTED','PENDING') NOT NULL,
+  `status_id` int NOT NULL,
   `device_type` varchar(45) NOT NULL,
   `new_request_date` date NOT NULL,
   PRIMARY KEY (`new_request_id`,`user_id`),
   KEY `USERIDNEW_idx` (`user_id`),
+  KEY `status_id_new_idx` (`status_id`),
+  CONSTRAINT `status_id_new` FOREIGN KEY (`status_id`) REFERENCES `status` (`status_id`),
   CONSTRAINT `USERIDNEW` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -364,7 +393,7 @@ CREATE TABLE `new_device_request` (
 
 LOCK TABLES `new_device_request` WRITE;
 /*!40000 ALTER TABLE `new_device_request` DISABLE KEYS */;
-INSERT INTO `new_device_request` VALUES (1,3,'Redmi Note 8 Neptune Blue, 4GB RAM, 64GB Storage','PENDING','PHONE','2020-02-16'),(2,5,'HP 14 Core i5 8th gen 14-inch FHD Laptop (8GB/256GB SSD/Windows 10/MS Office/Jet Black/2.04 kg), 14-cs1002TU','PENDING','LAPTOP','2020-02-21');
+INSERT INTO `new_device_request` VALUES (1,3,'Redmi Note 8 Neptune Blue, 4GB RAM, 64GB Storage',3,'PHONE','2020-02-16'),(2,5,'HP 14 Core i5 8th gen 14-inch FHD Laptop (8GB/256GB SSD/Windows 10/MS Office/Jet Black/2.04 kg), 14-cs1002TU',3,'LAPTOP','2020-02-21');
 /*!40000 ALTER TABLE `new_device_request` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -377,7 +406,7 @@ DROP TABLE IF EXISTS `permission`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `permission` (
   `permission_id` int NOT NULL AUTO_INCREMENT,
-  `permission` varchar(40) DEFAULT NULL,
+  `permission` varchar(40) NOT NULL,
   PRIMARY KEY (`permission_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -401,15 +430,19 @@ DROP TABLE IF EXISTS `phone`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `phone` (
   `phone_id` int NOT NULL AUTO_INCREMENT,
-  `phone_type` enum('PERSONAL','HOME','WORK','OTHER') NOT NULL,
-  `phone_description` enum('MOBILE','LANDLINE') DEFAULT NULL,
+  `phone_type_id` int NOT NULL,
+  `phone_description_id` int NOT NULL,
   `country_code_id` int DEFAULT NULL,
   `phone_number` varchar(10) NOT NULL,
   `area_code` varchar(10) DEFAULT NULL,
   `extension` int DEFAULT NULL,
   PRIMARY KEY (`phone_id`),
   KEY `COUNTRYCODEID_idx` (`country_code_id`),
-  CONSTRAINT `COUNTRYCODEIDPHONE` FOREIGN KEY (`country_code_id`) REFERENCES `country` (`country_id`)
+  KEY `phone_type_id_idx` (`phone_type_id`),
+  KEY `phone_description_id_idx` (`phone_description_id`),
+  CONSTRAINT `COUNTRYCODEIDPHONE` FOREIGN KEY (`country_code_id`) REFERENCES `country` (`country_id`),
+  CONSTRAINT `phone_description_id` FOREIGN KEY (`phone_description_id`) REFERENCES `phone_description` (`phone_description_id`),
+  CONSTRAINT `phone_type_id` FOREIGN KEY (`phone_type_id`) REFERENCES `phone_type` (`phone_type_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -419,8 +452,104 @@ CREATE TABLE `phone` (
 
 LOCK TABLES `phone` WRITE;
 /*!40000 ALTER TABLE `phone` DISABLE KEYS */;
-INSERT INTO `phone` VALUES (1,'PERSONAL','MOBILE',101,'7982934568',NULL,NULL),(2,'WORK','LANDLINE',101,'2668568','0180',NULL),(3,'HOME','MOBILE',101,'7982934568',NULL,NULL),(4,'PERSONAL','MOBILE',101,'9899235469',NULL,NULL),(5,'HOME','MOBILE',101,'9834378323',NULL,NULL),(6,'PERSONAL','MOBILE',101,'9898788767',NULL,NULL),(7,'PERSONAL','MOBILE',101,'9273278778',NULL,NULL),(8,'PERSONAL','MOBILE',101,'9807890878',NULL,NULL);
+INSERT INTO `phone` VALUES (1,1,1,101,'7982934568',NULL,NULL),(2,3,2,101,'2668568','0180',NULL),(3,2,1,101,'7982934568',NULL,NULL),(4,1,1,101,'9899235469',NULL,NULL),(5,2,1,101,'9834378323',NULL,NULL),(6,1,1,101,'9898788767',NULL,NULL),(7,1,1,101,'9273278778',NULL,NULL),(8,1,1,101,'9807890878',NULL,NULL);
 /*!40000 ALTER TABLE `phone` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phone_description`
+--
+
+DROP TABLE IF EXISTS `phone_description`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `phone_description` (
+  `phone_description_id` int NOT NULL AUTO_INCREMENT,
+  `phone_description` varchar(45) NOT NULL,
+  PRIMARY KEY (`phone_description_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phone_description`
+--
+
+LOCK TABLES `phone_description` WRITE;
+/*!40000 ALTER TABLE `phone_description` DISABLE KEYS */;
+INSERT INTO `phone_description` VALUES (1,'mobile'),(2,'landline');
+/*!40000 ALTER TABLE `phone_description` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `phone_type`
+--
+
+DROP TABLE IF EXISTS `phone_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `phone_type` (
+  `phone_type_id` int NOT NULL AUTO_INCREMENT,
+  `phone_type` varchar(45) NOT NULL,
+  PRIMARY KEY (`phone_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `phone_type`
+--
+
+LOCK TABLES `phone_type` WRITE;
+/*!40000 ALTER TABLE `phone_type` DISABLE KEYS */;
+INSERT INTO `phone_type` VALUES (1,'personal'),(2,'home'),(3,'office'),(4,'other');
+/*!40000 ALTER TABLE `phone_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `port_type`
+--
+
+DROP TABLE IF EXISTS `port_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `port_type` (
+  `port_type_id` int NOT NULL AUTO_INCREMENT,
+  `port_type` varchar(45) NOT NULL,
+  PRIMARY KEY (`port_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `port_type`
+--
+
+LOCK TABLES `port_type` WRITE;
+/*!40000 ALTER TABLE `port_type` DISABLE KEYS */;
+INSERT INTO `port_type` VALUES (1,'A'),(2,'B'),(3,'C'),(4,'D');
+/*!40000 ALTER TABLE `port_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `priority`
+--
+
+DROP TABLE IF EXISTS `priority`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `priority` (
+  `priority_id` int NOT NULL AUTO_INCREMENT,
+  `priority` varchar(45) NOT NULL,
+  PRIMARY KEY (`priority_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `priority`
+--
+
+LOCK TABLES `priority` WRITE;
+/*!40000 ALTER TABLE `priority` DISABLE KEYS */;
+INSERT INTO `priority` VALUES (1,'low'),(2,'medium'),(3,'high');
+/*!40000 ALTER TABLE `priority` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -463,13 +592,17 @@ CREATE TABLE `request` (
   `request_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `specification_id` int NOT NULL,
-  `priority` enum('LOW','MEDIUM','HIGH') NOT NULL,
-  `request_status` enum('ACCEPTED','REJECTED','PENDING') NOT NULL,
+  `priority_id` int NOT NULL,
+  `status_id` int NOT NULL,
   `request_date` timestamp NOT NULL,
   PRIMARY KEY (`request_id`),
   KEY `USERIDREQUEST_idx` (`user_id`),
   KEY `SPECIFICATIONIDREQUEST_idx` (`specification_id`),
+  KEY `status_id_idx` (`status_id`),
+  KEY `priority_id_idx` (`priority_id`),
+  CONSTRAINT `priority_id` FOREIGN KEY (`priority_id`) REFERENCES `priority` (`priority_id`),
   CONSTRAINT `SPECIFICATIONIDREQUEST` FOREIGN KEY (`specification_id`) REFERENCES `specification` (`specification_id`),
+  CONSTRAINT `status_id` FOREIGN KEY (`status_id`) REFERENCES `status` (`status_id`),
   CONSTRAINT `USERIDREQUEST` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -480,7 +613,7 @@ CREATE TABLE `request` (
 
 LOCK TABLES `request` WRITE;
 /*!40000 ALTER TABLE `request` DISABLE KEYS */;
-INSERT INTO `request` VALUES (1,1,5,'HIGH','PENDING','2019-12-15 06:01:49'),(2,5,1,'HIGH','ACCEPTED','2019-07-02 06:01:49');
+INSERT INTO `request` VALUES (1,1,5,3,3,'2019-12-15 06:01:49'),(2,5,1,3,1,'2019-07-02 06:01:49');
 /*!40000 ALTER TABLE `request` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -493,7 +626,7 @@ DROP TABLE IF EXISTS `role`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role` (
   `role_id` int NOT NULL AUTO_INCREMENT,
-  `role_name` enum('USER','ADMIN','SUPERADMIN') DEFAULT NULL,
+  `role_name` varchar(20) NOT NULL,
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -516,17 +649,21 @@ DROP TABLE IF EXISTS `role_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `role_permission` (
+  `role_permission_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `role_id` int NOT NULL,
   `permission_id` int NOT NULL,
-  `status` bit(1) NOT NULL,
+  `status_id` int NOT NULL,
+  PRIMARY KEY (`role_permission_id`),
   KEY `USER_ID_idx` (`user_id`),
   KEY `ROLEID_idx` (`role_id`),
   KEY `PERMISSIONID_idx` (`permission_id`),
+  KEY `status_id_rolepermission_idx` (`status_id`),
   CONSTRAINT `PERMISSIONID` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`permission_id`),
   CONSTRAINT `ROLEID` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`),
+  CONSTRAINT `status_id_rolepermission` FOREIGN KEY (`status_id`) REFERENCES `status` (`status_id`),
   CONSTRAINT `USERIDROLE` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -535,7 +672,7 @@ CREATE TABLE `role_permission` (
 
 LOCK TABLES `role_permission` WRITE;
 /*!40000 ALTER TABLE `role_permission` DISABLE KEYS */;
-INSERT INTO `role_permission` VALUES (1,3,10,_binary ''),(1,3,12,_binary ''),(2,2,14,_binary ''),(2,2,10,_binary ''),(2,2,9,_binary ''),(3,1,9,_binary ''),(3,1,13,_binary ''),(4,1,9,_binary ''),(4,1,13,_binary ''),(5,1,9,_binary ''),(5,1,13,_binary '');
+INSERT INTO `role_permission` VALUES (1,1,3,10,6),(2,1,3,12,6),(3,2,2,14,6),(4,2,2,10,6),(5,2,2,9,6),(6,3,1,9,6),(7,3,1,13,6),(8,4,1,9,6),(9,4,1,13,6),(10,5,1,9,6),(11,5,1,13,6);
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -548,7 +685,7 @@ DROP TABLE IF EXISTS `salutation`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `salutation` (
   `salutation_id` int NOT NULL AUTO_INCREMENT,
-  `salutation` varchar(45) DEFAULT NULL,
+  `salutation` varchar(45) NOT NULL,
   PRIMARY KEY (`salutation_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -578,21 +715,24 @@ CREATE TABLE `specification` (
   `hard_disk` varchar(45) DEFAULT NULL,
   `operating_system` varchar(45) DEFAULT NULL,
   `graphic_card` varchar(45) DEFAULT NULL,
-  `wireless` enum('YES','NO') DEFAULT NULL,
+  `wireless` bit(1) DEFAULT NULL,
   `battery_capacity` varchar(45) DEFAULT NULL,
-  `charger` enum('YES','NO') DEFAULT NULL,
-  `usb_port_type` enum('A','B','C','-') DEFAULT NULL,
-  `usb_version` enum('1.0','2.0','3.0','-') DEFAULT NULL,
-  `ethernet_port_rj45` enum('YES','NO') DEFAULT NULL,
-  `hdmi_port_type` enum('A','C','D','-') DEFAULT NULL,
-  `sd_card` enum('YES','NO') DEFAULT NULL,
-  `display` enum('YES','NO') DEFAULT NULL,
-  `dvi_port` enum('YES','NO') DEFAULT NULL,
-  `VGAPORT` enum('YES','NO') DEFAULT NULL,
-  `audio_jack` enum('YES','NO') DEFAULT NULL,
-  `thunder_bolt` enum('YES','NO') DEFAULT NULL,
-  `lightning_port` enum('YES','NO') DEFAULT NULL,
-  PRIMARY KEY (`specification_id`)
+  `charger` bit(1) DEFAULT NULL,
+  `usb_port_type_id` int DEFAULT NULL,
+  `ethernet_port_rj45` bit(1) DEFAULT NULL,
+  `hdmi_port_type_id` int DEFAULT NULL,
+  `sd_card` bit(1) DEFAULT NULL,
+  `display` bit(1) DEFAULT NULL,
+  `dvi_port` bit(1) DEFAULT NULL,
+  `VGAPORT` bit(1) DEFAULT NULL,
+  `audio_jack` bit(1) DEFAULT NULL,
+  `thunder_bolt` bit(1) DEFAULT NULL,
+  `lightning_port` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`specification_id`),
+  KEY `usb_port_type_id_idx` (`usb_port_type_id`),
+  KEY `hdmi_port_type_id_idx` (`hdmi_port_type_id`),
+  CONSTRAINT `hdmi_port_type_id` FOREIGN KEY (`hdmi_port_type_id`) REFERENCES `port_type` (`port_type_id`),
+  CONSTRAINT `usb_port_type_id` FOREIGN KEY (`usb_port_type_id`) REFERENCES `port_type` (`port_type_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -602,7 +742,7 @@ CREATE TABLE `specification` (
 
 LOCK TABLES `specification` WRITE;
 /*!40000 ALTER TABLE `specification` DISABLE KEYS */;
-INSERT INTO `specification` VALUES (1,'PHONE','DUALCORE','4GB','64GB','ANDROID',NULL,'YES','4000MAH','YES','-','-','NO','-','YES','NO','NO','NO','YES','NO','NO'),(2,'PHONE','OCTACORE','6GB','128GB','ANDROID',NULL,'YES','4400MAH','YES','-','-','NO','-','YES','NO','NO','NO','YES','NO','NO'),(3,'PHONE','DUALCORE','4GB','64GB','IOS',NULL,'YES','3000MAH','YES','-','-','NO','-','YES','NO','NO','NO','YES','NO','YES'),(4,'LAPTOP','INTELI5','4GB','520GB','WINDOWS','4GB','YES','4000MAH','YES','A','2.0','NO','C','YES','YES','YES','YES','YES','NO','NO'),(5,'LAPTOP','INTELI7','6GB','520GB','UBUNTU','4GB','YES','4000MAH','YES','A','2.0','NO','C','YES','YES','YES','YES','YES','NO','NO'),(6,'DESKTOP','INTELI6','2GB','720GB','LINUX','2GB','NO',NULL,'NO','B','3.0','YES','D','NO','YES','YES','YES','YES','YES','NO'),(7,'HEADPHONE',NULL,NULL,NULL,NULL,NULL,'YES','4000MAH','YES','-','-','NO','-','NO','NO','NO','NO','NO','NO','NO');
+INSERT INTO `specification` VALUES (1,'PHONE','DUALCORE','4GB','64GB','ANDROID',NULL,_binary '','4000MAH',_binary '',4,_binary '\0',4,_binary '',_binary '\0',_binary '\0',_binary '\0',_binary '',_binary '\0',_binary '\0'),(2,'PHONE','OCTACORE','6GB','128GB','ANDROID',NULL,_binary '','4400MAH',_binary '',4,_binary '\0',4,_binary '',_binary '\0',_binary '\0',_binary '\0',_binary '',_binary '\0',_binary '\0'),(3,'PHONE','DUALCORE','4GB','64GB','IOS',NULL,_binary '','3000MAH',_binary '',4,_binary '\0',4,_binary '',_binary '\0',_binary '\0',_binary '\0',_binary '',_binary '\0',_binary ''),(4,'LAPTOP','INTELI5','4GB','520GB','WINDOWS','4GB',_binary '','4000MAH',_binary '',1,_binary '\0',2,_binary '',_binary '',_binary '',_binary '',_binary '',_binary '\0',_binary '\0'),(5,'LAPTOP','INTELI7','6GB','520GB','UBUNTU','4GB',_binary '','4000MAH',_binary '',1,_binary '\0',2,_binary '',_binary '',_binary '',_binary '',_binary '',_binary '\0',_binary '\0'),(6,'DESKTOP','INTELI6','2GB','720GB','LINUX','2GB',_binary '\0',NULL,_binary '\0',2,_binary '',3,_binary '\0',_binary '',_binary '',_binary '',_binary '',_binary '',_binary '\0'),(7,'HEADPHONE',NULL,NULL,NULL,NULL,NULL,_binary '','4000MAH',_binary '',4,_binary '\0',4,_binary '\0',_binary '\0',_binary '\0',_binary '\0',_binary '\0',_binary '\0',_binary '\0');
 /*!40000 ALTER TABLE `specification` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -616,7 +756,7 @@ DROP TABLE IF EXISTS `state`;
 CREATE TABLE `state` (
   `state_id` int NOT NULL AUTO_INCREMENT,
   `state` varchar(45) NOT NULL,
-  `country_id` int DEFAULT NULL,
+  `country_id` int NOT NULL,
   PRIMARY KEY (`state_id`),
   KEY `COUNTRYCODEID_idx` (`country_id`),
   CONSTRAINT `COUNTRYCODEID` FOREIGN KEY (`country_id`) REFERENCES `country` (`country_id`)
@@ -634,6 +774,30 @@ INSERT INTO `state` VALUES (1,'Andaman and Nicobar Islands',101),(2,'Andhra Prad
 UNLOCK TABLES;
 
 --
+-- Table structure for table `status`
+--
+
+DROP TABLE IF EXISTS `status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `status` (
+  `status_id` int NOT NULL AUTO_INCREMENT,
+  `status` varchar(45) NOT NULL,
+  PRIMARY KEY (`status_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `status`
+--
+
+LOCK TABLES `status` WRITE;
+/*!40000 ALTER TABLE `status` DISABLE KEYS */;
+INSERT INTO `status` VALUES (1,'accepted'),(2,'rejected'),(3,'pending'),(4,'allocated'),(5,'free'),(6,'active'),(7,'not_active');
+/*!40000 ALTER TABLE `status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -646,11 +810,11 @@ CREATE TABLE `user` (
   `password` varchar(45) NOT NULL,
   `date_of_birth` date NOT NULL,
   `date_of_joining` date NOT NULL,
-  `gender` enum('MALE','FEMALE','OTHER') NOT NULL,
-  `active_status` bit(1) NOT NULL,
-  `aadhar_number` varchar(14) DEFAULT NULL,
+  `status_id` int NOT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `USERID_UNIQUE` (`user_id`)
+  UNIQUE KEY `USERID_UNIQUE` (`user_id`),
+  KEY `status_id_user_idx` (`status_id`),
+  CONSTRAINT `status_id_user` FOREIGN KEY (`status_id`) REFERENCES `status` (`status_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -660,7 +824,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'NCHAUHAN@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1998-10-01','2020-02-23','MALE',_binary '','2343 4545 4352'),(2,'MGUPTA@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1996-10-11','2020-02-27','FEMALE',_binary '','4546 4453 3546'),(3,'KDHUSHMANA@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1999-01-11','2020-02-23','MALE',_binary '','7785 3452 4543'),(4,'RBISHT@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1998-12-21','2020-02-16','MALE',_binary '','2435 6765 5644'),(5,'JCHAWLA@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1998-09-30','2020-02-03','MALE',_binary '','6756 5464 6545');
+INSERT INTO `user` VALUES (1,'NCHAUHAN@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1998-10-01','2020-02-23',6),(2,'MGUPTA@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1996-10-11','2020-02-27',6),(3,'KDHUSHMANA@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1999-01-11','2020-02-23',6),(4,'RBISHT@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1998-12-21','2020-02-16',6),(5,'JCHAWLA@EX2INDIA.COM','b24331b1a138cde62aa1f679164fc62f','1998-09-30','2020-02-03',6);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -676,10 +840,17 @@ CREATE TABLE `user_mapping` (
   `department_id` int NOT NULL,
   `marital_status_id` int NOT NULL,
   `salutation_id` int NOT NULL,
+  `gender_id` int NOT NULL,
   KEY `department_id_idx` (`department_id`),
   KEY `marital_status_id_idx` (`marital_status_id`),
+  KEY `gender_id_idx` (`gender_id`),
+  KEY `user_id_mapping_idx` (`user_id`),
+  KEY `salutation_id_idx` (`salutation_id`),
   CONSTRAINT `department_id` FOREIGN KEY (`department_id`) REFERENCES `department` (`department_id`),
-  CONSTRAINT `marital_status` FOREIGN KEY (`marital_status_id`) REFERENCES `marital_status` (`marital_status_id`)
+  CONSTRAINT `gender_id` FOREIGN KEY (`gender_id`) REFERENCES `gender` (`gender_id`),
+  CONSTRAINT `marital_status` FOREIGN KEY (`marital_status_id`) REFERENCES `marital_status` (`marital_status_id`),
+  CONSTRAINT `salutation_id` FOREIGN KEY (`salutation_id`) REFERENCES `salutation` (`salutation_id`),
+  CONSTRAINT `user_id_mapping` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -689,7 +860,7 @@ CREATE TABLE `user_mapping` (
 
 LOCK TABLES `user_mapping` WRITE;
 /*!40000 ALTER TABLE `user_mapping` DISABLE KEYS */;
-INSERT INTO `user_mapping` VALUES (1,1,1,1),(2,1,1,3),(3,4,1,1),(4,1,1,1),(5,1,1,1);
+INSERT INTO `user_mapping` VALUES (1,1,1,1,1),(2,1,1,3,2),(3,4,1,1,1),(4,1,1,1,1),(5,1,1,1,1);
 /*!40000 ALTER TABLE `user_mapping` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -706,7 +877,7 @@ CREATE TABLE `user_name` (
   `first_name` varchar(45) NOT NULL,
   `middle_name` varchar(45) DEFAULT NULL,
   `last_name` varchar(45) DEFAULT NULL,
-  `relation_id` int DEFAULT NULL,
+  `relation_id` int NOT NULL,
   PRIMARY KEY (`user_name_id`),
   KEY `user_id_idx` (`user_id`),
   KEY `relation_id_idx` (`relation_id`),
@@ -723,6 +894,35 @@ LOCK TABLES `user_name` WRITE;
 /*!40000 ALTER TABLE `user_name` DISABLE KEYS */;
 INSERT INTO `user_name` VALUES (1,1,'namit',NULL,'chauhan',1),(2,2,'megha',NULL,'gupta',2),(3,3,'koustabh',NULL,'dushmana',3),(4,4,'rishabh',NULL,'bisht',4),(5,5,'jaswinder','singh','chawla',5);
 /*!40000 ALTER TABLE `user_name` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_phone`
+--
+
+DROP TABLE IF EXISTS `user_phone`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_phone` (
+  `user_phone_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `phone_id` int NOT NULL,
+  PRIMARY KEY (`user_phone_id`),
+  KEY `user_id_phone_idx` (`user_id`),
+  KEY `phone_id_idx` (`phone_id`),
+  CONSTRAINT `phone_id` FOREIGN KEY (`phone_id`) REFERENCES `phone` (`phone_id`),
+  CONSTRAINT `user_id_phone` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_phone`
+--
+
+LOCK TABLES `user_phone` WRITE;
+/*!40000 ALTER TABLE `user_phone` DISABLE KEYS */;
+INSERT INTO `user_phone` VALUES (1,1,1),(2,1,2),(3,2,3),(4,3,4),(5,3,5),(6,4,6),(7,5,7),(8,5,8);
+/*!40000 ALTER TABLE `user_phone` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -758,4 +958,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-04 16:40:05
+-- Dump completed on 2020-03-05 14:11:56
